@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>static-extern-const | Keep learning</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="static静态变量
+根据静态变量的作用域, 可以将其分为两种:
+
+静态局部变量, 定义在函数体内, 作用域仅限于该函数
+静态全局变量, 定义在函数体外, 作用域仅限于该文件
+
+静态变量虽在程序的整个执行过程中始终存在, 但是在它作用域之外不能使用. 静态变量是对变量作用域的描述, 它不会随着函数的调用和退出而发生变化.它被放在程序的全局数据段中, 上次调用函数的时候, 如果给静态变量赋予某个值,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="static-extern-const">
+<meta property="og:url" content="http://yoursite.com/2014/11/09/static-extern-const/">
+<meta property="og:site_name" content="Keep learning">
+<meta property="og:description" content="static静态变量
+根据静态变量的作用域, 可以将其分为两种:
+
+静态局部变量, 定义在函数体内, 作用域仅限于该函数
+静态全局变量, 定义在函数体外, 作用域仅限于该文件
+
+静态变量虽在程序的整个执行过程中始终存在, 但是在它作用域之外不能使用. 静态变量是对变量作用域的描述, 它不会随着函数的调用和退出而发生变化.它被放在程序的全局数据段中, 上次调用函数的时候, 如果给静态变量赋予某个值,">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="static-extern-const">
+<meta name="twitter:description" content="static静态变量
+根据静态变量的作用域, 可以将其分为两种:
+
+静态局部变量, 定义在函数体内, 作用域仅限于该函数
+静态全局变量, 定义在函数体外, 作用域仅限于该文件
+
+静态变量虽在程序的整个执行过程中始终存在, 但是在它作用域之外不能使用. 静态变量是对变量作用域的描述, 它不会随着函数的调用和退出而发生变化.它被放在程序的全局数据段中, 上次调用函数的时候, 如果给静态变量赋予某个值,">
+
+  
+    <link rel="alternative" href="/atom.xml" title="Keep learning" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Keep learning</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><input type="submit" value="&#xF002;" class="search-form-submit"><input type="hidden" name="q" value="site:http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-static-extern-const" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/11/09/static-extern-const/" class="article-date">
+  <time datetime="2014-11-09T13:48:21.000Z" itemprop="datePublished">Nov 9 2014</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      static-extern-const
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="static静态变量">static静态变量</h2>
+<p>根据静态变量的作用域, 可以将其分为两种:</p>
+<ul>
+<li>静态局部变量, 定义在函数体内, 作用域仅限于该函数</li>
+<li>静态全局变量, 定义在函数体外, 作用域仅限于该文件</li>
+</ul>
+<p>静态变量虽在程序的整个执行过程中始终存在, 但是在它作用域之外不能使用. 静态变量是对变量作用域的描述, 它不会随着函数的调用和退出而发生变化.它被放在程序的全局数据段中, 上次调用函数的时候, 如果给静态变量赋予某个值, 下次函数调用时，这个值依然保持不变, 这一点是它与堆栈变量和堆变量的区别.</p>
+<ul>
+<li>若全局变量仅在单个C文件中访问, 则可将此变量改为静态全局变量, 以降低模块间的耦合度</li>
+<li>若全局变量仅由单个函数访问, 则可将此变量改为该函数的静态局部变量, 以降低模块间的耦合度</li>
+</ul>
+<a id="more"></a>
+
+<h4 id="静态局部变量">静态局部变量</h4>
+<ul>
+<li>非静态局部变量的作用域只是<strong>函数的本次执行</strong>, 函数退出后变量被释放, 下次从头再来</li>
+<li>静态局部变量的作用域是<strong>函数的所有执行</strong>, 函数退出后, 变量继续存在, 下次再续前缘</li>
+</ul>
+<p>static修饰的全局变量声明与定义同时进行, 也就是说当你在头文件中使用static声明了全局变量后, 它也同时被定义了</p>
+<p>静态局部变量定义在函数体内, 并且出现在函数内部的基本类型的静态变量初始化语句只有在第一次调用才执行, 即如果在定义静态局部变量的同时进行初始化, 则再次运行到此处时不再执行初始化操作, 所以强迫症患者不必担心此处存在变量多次定义的问题.</p>
+<p>静态局部变量的初始化表达式必须是一个常量或者常量表达式。即使局部静态变量定义时没有赋初值，系统会自动赋初值0(对数值型变量)或空字符(对字符变量), 当多次调用一个函数且要求在调用之间保留某些变量的值时, 可考虑采用静态局部变量.</p>
+<h4 id="静态全局变量">静态全局变量</h4>
+<ul>
+<li>非静态全局变量的作用域是<strong>整个程序</strong>, 该全局变量在程序的所有其他文件中均可使用, extern即可</li>
+<li>静态全局变量的作用域只是<strong>所在文件</strong>, 该全局变量在程序的所有其他文件中不可使用, extern也不行</li>
+</ul>
+<p>其实我们可以视静态函数为一种静态全局变量, 该函数遵循同样的规则, 则该函数只在函数定义的文件中有效, 而在其他文件中无法使用.</p>
+<pre><code><span class="comment">// func.h</span>
+  <span class="keyword">static</span> <span class="keyword">int</span> hello = <span class="number">10</span>;
+
+  <span class="keyword">void</span> increase();
+  <span class="keyword">void</span> decrease();
+
+<span class="comment">// inc.cpp</span>
+  <span class="preprocessor">#<span class="keyword">include</span> "func.h"</span>
+  <span class="preprocessor">#<span class="keyword">include</span> &lt;stdio.h&gt;</span>
+
+  <span class="keyword">void</span> increase()
+  {
+      hello++;
+      <span class="built_in">printf</span>(<span class="string">"In increase: hello[%p] = %d\n"</span>,&amp;hello, hello);    
+  }
+
+<span class="comment">// dec.cpp</span>
+  <span class="preprocessor"># <span class="keyword">include</span> "func.h"</span>
+  <span class="preprocessor"># <span class="keyword">include</span> &lt;stdio.h&gt;</span>
+
+  <span class="keyword">void</span> decrease()
+  {
+      hello--;
+      <span class="built_in">printf</span>(<span class="string">"In decrease: hello[%p] = %d\n"</span>,&amp;hello, hello);    
+  }
+
+<span class="comment">// main.cpp</span>
+  <span class="preprocessor">#<span class="keyword">include</span> "func.h"</span>
+  <span class="preprocessor">#<span class="keyword">include</span> &lt;stdio.h&gt;</span>
+
+  <span class="keyword">int</span> main()
+  {
+      increase();
+      decrease();
+
+      increase();
+      decrease();
+      <span class="built_in">printf</span>(<span class="string">"In main: hello[%p] = %d\n"</span>, &amp;hello, hello);            
+      <span class="keyword">return</span> <span class="number">0</span>;
+  }
+</code></pre><p>上述示例中, 在func.h中定义了静态全局变量, 然后分别在不同的原文件中去包含该头文件, 此处我们只要记住, 包含的头文件即是直接展开在include处, 所以, 该静态变量的定义分别出现在inc.cpp和dec.cpp中, 因为全局静态的作用域仅限于所在文件, 所以他们分别被使用在不同的编译单元中, 虽然名称相同, 但是并不会相互影响, 这也就是static变量的魅力所在. 同时, 在main.cpp中, 也include了func.h, 所以同样存在一个独立的静态变量, 程序输出如下:</p>
+<pre><code><span class="constant">In increase: hello[0x601044]</span> = <span class="number">11</span>
+<span class="constant">In decrease: hello[0x601048]</span> = <span class="number">9</span>
+<span class="constant">In increase: hello[0x601044]</span> = <span class="number">12</span>
+<span class="constant">In decrease: hello[0x601048]</span> = <span class="number">8</span>
+<span class="constant">In main: hello[0x601040]</span> = <span class="number">10</span>
+</code></pre><p>可以发现, 如果将全局静态变量定义在头文件中, 其他多个文件包含该头文件时, 会导致存在多个不同的同名静态全局变量, 每一次包含, 都会在相应原文件的作用域中定义一个新的静态全局变量, 这使得模块件耦合度变得很大, 不利于维护. 所以对于静态全局变量, 一般将其定义在原文件而不是头文件中.</p>
+<hr>
+<h2 id="const_关键字">const 关键字</h2>
+<p>首先需要明晰const的概念, 如区分以下几种定义方式:</p>
+<pre><code><span class="keyword">int</span> a = <span class="number">500</span>; 
+<span class="keyword">const</span> <span class="keyword">int</span>* p = &amp;a;        <span class="comment">// 常量指针, 不能通过该指针改变内容, 如不能*p=1</span>
+<span class="keyword">int</span> <span class="keyword">const</span> *p = &amp;a;        <span class="comment">// 常量指针</span>
+<span class="keyword">int</span>* <span class="keyword">const</span> p = &amp;a;        <span class="comment">// 指针常量, 不允许改变该指针的指向, 如不能p++</span>
+<span class="keyword">const</span> <span class="keyword">int</span>* <span class="keyword">const</span> p = &amp;a;  <span class="comment">// 指向常量的常量指针</span>
+</code></pre><p>此处我们可参照另一篇关于指针的文章, 类似于指针数组和数组指针的辨析.</p>
+<h4 id="作用于函数参数">作用于函数参数</h4>
+<p>const作用于参数时, 通常修饰指针参数和引用参数:</p>
+<pre><code><span class="keyword">void</span> Fun(<span class="keyword">const</span> A *<span class="keyword">in</span>); <span class="comment">//修饰指针型传入参数</span>
+<span class="keyword">void</span> Fun(<span class="keyword">const</span> A &amp;<span class="keyword">in</span>); <span class="comment">//修饰引用型传入参数</span>
+</code></pre><p>虽然使用常量指针后函数不能修改指针所指内容, 但是不代表不能通过其他方式修改, 比如可以通过普通指针去修改, 所以如果不希望函数改变参数的值, 使用const引用不失为一种可行的方法:</p>
+<pre><code><span class="comment">// void func(const int &amp;i)</span>
+<span class="keyword">void</span> func(<span class="keyword">const</span> <span class="keyword">int</span> *pi)
+{
+    <span class="comment">// *pi = 100; 错误</span>
+    <span class="keyword">int</span>* pp = (<span class="keyword">int</span>*)pi;
+    *pp = <span class="number">100</span>;
+}
+</code></pre><h4 id="const的c++特性">const的c++特性</h4>
+<ul>
+<li><p>const成员函数不可以修改对象的数据, 不管对象是否具有const性质</p>
+</li>
+<li><p>非const对象的地址可以赋给指向const对象的指针</p>
+</li>
+<li><p>const对象的地址不能赋给普通的非const对象的指针</p>
+</li>
+<li><p>const对象的成员是不能修改的, 所以只能访问const成员函数</p>
+</li>
+<li>非const对象可以访问任意的成员函数, 包括const成员函数</li>
+</ul>
+<p>const数据成员只在某个对象生存期内是常量, 而对于整个类而言却是可变的. 因为类可以创建多个对象, 不同的对象其const数据成员的值可以不同.</p>
+<h4 id="测试">测试</h4>
+<pre><code><span class="keyword">int</span> a = <span class="number">0</span>, b = <span class="number">1</span>;
+const <span class="keyword">int</span> *pa = &amp;a;
+<span class="keyword">int</span>* const pb = &amp;b;
+
+<span class="regexp">//</span> test code
+...
+
+<span class="keyword">printf</span>(<span class="string">"a = <span class="variable">%d</span>, "</span>, a);
+<span class="keyword">printf</span>(<span class="string">"b = <span class="variable">%d</span>, "</span>, b);
+<span class="keyword">printf</span>(<span class="string">"*pa = <span class="variable">%d</span>, "</span>, *pa);
+<span class="keyword">printf</span>(<span class="string">"*pb = <span class="variable">%d</span>\n"</span>, *pb);
+</code></pre><p>在test code处我们添加以下代码, </p>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>null</td>
+<td>a = 0, b = 1, <em>pa = 0, </em>pb = 1</td>
+</tr>
+<tr>
+<td>pa = &amp;b</td>
+<td>a = 0, b = 1, <em>pa = 1, </em>pb = 1</td>
+</tr>
+<tr>
+<td>*pa = 1</td>
+<td>error: assignment of read-only location ‘* pa’</td>
+</tr>
+<tr>
+<td>a = 1; b = 0</td>
+<td>a = 1, b = 0, <em>pa = 1, </em>pb = 0</td>
+</tr>
+<tr>
+<td>pb = &amp;a</td>
+<td>error: assignment of read-only variable ‘pb’</td>
+</tr>
+<tr>
+<td>*pb = 0</td>
+<td>a = 0, b = 0, <em>pa = 0, </em>pb = 0</td>
+</tr>
+</tbody>
+</table>
+<p>对于常量来说, 系统没有划定专门的区域来保护其中的数据不能被更改. 也就是说, 使用常量的方式对数据进行保护是通过编译器作语法限制来实现的. 我们仍然可以绕过编译器的限制去修改被定义为“常量”的内存区域.</p>
+<pre><code>const <span class="keyword">int</span> hello = <span class="number">10</span>;
+<span class="regexp">//int</span> test = <span class="number">10</span>;
+<span class="regexp">//const</span> <span class="keyword">int</span> hello = test;
+<span class="keyword">int</span> *p = (<span class="keyword">int</span>*) &amp;hello;
+*p = <span class="number">11</span>;
+<span class="keyword">printf</span>(<span class="string">"hello = <span class="variable">%d</span>\n"</span>, hello);
+<span class="keyword">printf</span>(<span class="string">"*p = <span class="variable">%d</span>\n"</span>, *p);
+<span class="keyword">printf</span>(<span class="string">"<span class="variable">%p</span>, <span class="variable">%p</span>\n"</span>, &amp;hello, p);
+</code></pre><p>实际上, 经过测试, 在gcc version 4.8.2中, 输出为:</p>
+<pre><code>hello = <span class="number">10</span>
+*p = <span class="number">11</span>
+<span class="number">0x7fffdcf6c614</span>, <span class="number">0x7fffdcf6c614</span>
+</code></pre><p>变量hello的值看似并没有被改变, 依然是10, 而*pi的值是11, 那么是不是编译器为p指针重新分配了一块内存呢, 但是从指针的输出来看, hello的地址和指针p的值却是相同的, 那么为什么hello和*p的输出却又不同呢, 我想这应该只能解释为编译器的优化问题了, 编译器应该是在预处理时将代码中的常量hello直接替换成了10, 即<code>printf(&quot;hello = %d\n&quot;, hello)</code>被改变成<code>printf(&quot;hello = %d\n&quot;, 10)</code>. 如果我们不直接对const hello赋值, 那么编译器将不能进行这种预处理, 如注释行中所示, 此时我们将得到预想的输出:</p>
+<pre><code>hello = <span class="number">11</span>
+*p = <span class="number">11</span>
+<span class="number">0x7fff582ab150</span>, <span class="number">0x7fff582ab150</span>
+</code></pre><p>在c++中, 由于常量对象的状态不允许被修改, 而非常量函数存在修改对象状态的可能性, 所以不能通过常量对象调用非常量成员函数, 同样的, 在常量成员函数中虽然不能修改成员变量的值.</p>
+<p>我们知道每个成员函数都有一个隐含的指向对象本身的this指针, 而常量函数则包含一个this的常量指针</p>
+<pre><code><span class="keyword">void</span> inspect(<span class="keyword">const</span> Fred* <span class="keyword">this</span>) <span class="keyword">const</span>;
+<span class="keyword">void</span> mutate(Fred* <span class="keyword">this</span>);
+</code></pre><p>只要我们愿意, 还是可以通过常量函数修改对象的状态. 同理, 对于常量对象, 我们也可以构造另外一个指向同一块内存的指针去修改它的状态.</p>
+<p>虽然我们可以绕过编译器的错误去修改类的数据成员, 但是C++也允许我们在数据成员的定义前面加上mutable, 以允许该成员可以在常量函数中被修改.</p>
+<hr>
+<h2 id="extern关键字">extern关键字</h2>
+<p>extern可以置于变量或者函数前，以标示变量或者函数的定义在别的文件中，提示编译器遇到此变量和函数时在其他模块中寻找其定义。此外extern也可用来进行链接指定。</p>
+<p>extern有两个作用:</p>
+<ul>
+<li><p>设定函数的编译方式, 如<code>extern &quot;C&quot; void func(int a, int b);</code>, 则编译器在编译函数func时按着C的规则去翻译相应的函数名而不是C++的, C++为了支持函数重载, 会加上函数参数, 这样func可能会翻译成func@aBc_int_int#%$</p>
+</li>
+<li><p>声明函数或全局变量, 如<code>extern int g_Int</code>, 声明的函数和变量可以在本模块使用, 这样可以通过编译阶段, 链接时会从其他模块的目标代码中找到此函数</p>
+</li>
+</ul>
+<p>extern用在变量声明中常常有这样一个作用, 你在.c文件中声明了一个全局的变量, 这个全局的变量如果要被引用，就放在.h中并用extern来声明.</p>
+<p>如果函数的声明中带有关键字extern, 仅仅是暗示这个函数可能在别的源文件里定义, 没有其它作用. 即<code>extern int func();</code>和<code>int func();</code>两个函数声明没有明显的区别.</p>
+<hr>
+<h2 id="总结">总结</h2>
+<ul>
+<li>extern和static不能同时修饰一个变量</li>
+<li>static变量的值是可变的, const常量的值不能改变</li>
+<li>把局部变量改变为静态变量后是改变了它的存储方式，即改变了它的生存期</li>
+<li>把全局变量改变为静态变量后是改变了它的作用域，限制了它的使用范围</li>
+</ul>
+<hr>
+<h2 id="Reference">Reference</h2>
+<p><a href="http://www.cnblogs.com/dongzhiquan/archive/2009/07/21/1994792.html" target="_blank" rel="external">static静态变量的理解</a><br><a href="http://www.cnblogs.com/yc_sunniwell/archive/2010/07/14/1777431.html" target="_blank" rel="external">C/C++中extern关键字详解</a><br><a href="http://www.cnblogs.com/yc_sunniwell/archive/2010/07/14/1777416.html" target="_blank" rel="external">C/C++中const关键字详解</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2014/11/09/static-extern-const/" data-id="jzql9zz0v1xrqfpc" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c-language/">c language</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/11/22/overload-operator-for-class/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          类的运算符重载
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/11/04/head-file-and-code-file/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">头文件和原文件</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/adb/">adb</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/awk/">awk</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-language/">c language</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/">c++</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep/">grep</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/">jekyll</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/">network</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reading/">reading</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sed/">sed</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqlite/">sqlite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/thinking/">thinking</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/">vim</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/adb/" style="font-size: 10.00px;">adb</a><a href="/tags/android/" style="font-size: 10.00px;">android</a><a href="/tags/awk/" style="font-size: 10.00px;">awk</a><a href="/tags/c-language/" style="font-size: 20.00px;">c language</a><a href="/tags/c/" style="font-size: 15.00px;">c++</a><a href="/tags/github/" style="font-size: 12.50px;">github</a><a href="/tags/grep/" style="font-size: 10.00px;">grep</a><a href="/tags/hexo/" style="font-size: 10.00px;">hexo</a><a href="/tags/jekyll/" style="font-size: 10.00px;">jekyll</a><a href="/tags/life/" style="font-size: 10.00px;">life</a><a href="/tags/linux/" style="font-size: 10.00px;">linux</a><a href="/tags/markdown/" style="font-size: 10.00px;">markdown</a><a href="/tags/network/" style="font-size: 12.50px;">network</a><a href="/tags/reading/" style="font-size: 10.00px;">reading</a><a href="/tags/sed/" style="font-size: 10.00px;">sed</a><a href="/tags/shell/" style="font-size: 12.50px;">shell</a><a href="/tags/sqlite/" style="font-size: 10.00px;">sqlite</a><a href="/tags/thinking/" style="font-size: 17.50px;">thinking</a><a href="/tags/vim/" style="font-size: 10.00px;">vim</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">November 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">October 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">September 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">August 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">July 2013</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">May 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">March 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">January 2013</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/09/01/about-sqlite/">sqlite数据库</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/07/base-class-and-derived-class-related/">基类派生类的畅想</a>
+          </li>
+        
+          <li>
+            <a href="/2014/11/22/overload-operator-for-class/">类的运算符重载</a>
+          </li>
+        
+          <li>
+            <a href="/2014/11/09/static-extern-const/">static-extern-const</a>
+          </li>
+        
+          <li>
+            <a href="/2014/11/04/head-file-and-code-file/">头文件和原文件</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+
+  </div>
+</body>
+</html>

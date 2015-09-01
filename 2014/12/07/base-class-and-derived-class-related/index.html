@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>基类派生类的畅想 | Keep learning</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="本文结束后, 我们希望可以明白以下几个问题:
+
+基类指针和派生类指针指向
+基类派生类中使用同名变量
+虚基类的析构函数需要声明为virtual">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基类派生类的畅想">
+<meta property="og:url" content="http://yoursite.com/2014/12/07/base-class-and-derived-class-related/">
+<meta property="og:site_name" content="Keep learning">
+<meta property="og:description" content="本文结束后, 我们希望可以明白以下几个问题:
+
+基类指针和派生类指针指向
+基类派生类中使用同名变量
+虚基类的析构函数需要声明为virtual">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基类派生类的畅想">
+<meta name="twitter:description" content="本文结束后, 我们希望可以明白以下几个问题:
+
+基类指针和派生类指针指向
+基类派生类中使用同名变量
+虚基类的析构函数需要声明为virtual">
+
+  
+    <link rel="alternative" href="/atom.xml" title="Keep learning" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Keep learning</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><input type="submit" value="&#xF002;" class="search-form-submit"><input type="hidden" name="q" value="site:http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-base-class-and-derived-class-related" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/12/07/base-class-and-derived-class-related/" class="article-date">
+  <time datetime="2014-12-06T17:45:18.000Z" itemprop="datePublished">Dec 7 2014</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      基类派生类的畅想
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>本文结束后, 我们希望可以明白以下几个问题:</p>
+<ul>
+<li>基类指针和派生类指针指向</li>
+<li>基类派生类中使用同名变量</li>
+<li>虚基类的析构函数需要声明为virtual</li>
+</ul>
+<a id="more"></a>
+
+<p>老规矩, 首先来看一段代码:</p>
+<p><strong>fruit.h</strong></p>
+<pre><code><span class="preprocessor">#ifndef FRUIT_H</span>
+<span class="preprocessor">#<span class="keyword">define</span> FRUIT_H</span>
+
+<span class="preprocessor">#<span class="keyword">include</span> &lt;string&gt;</span>
+
+<span class="keyword">class</span> fruit {
+    <span class="keyword">public</span>:
+        fruit();
+        <span class="comment">//~fruit();</span>
+        <span class="keyword">virtual</span> ~fruit();
+        <span class="keyword">void</span> clearFruitColor();
+        <span class="keyword">void</span> displayColor();
+        <span class="keyword">virtual</span> <span class="keyword">void</span> printColor();
+    <span class="keyword">protected</span>:
+        std::<span class="built_in">string</span> color;
+        std::<span class="built_in">string</span> name;
+};
+<span class="preprocessor">#<span class="keyword">endif</span></span>
+</code></pre><p><strong>fruit.cpp</strong></p>
+<pre><code><span class="preprocessor">#<span class="keyword">include</span> "fruit.h"</span>
+<span class="preprocessor">#<span class="keyword">include</span> &lt;iostream&gt;</span>
+
+fruit::fruit()
+{
+    name = <span class="string">"fruit"</span>;
+    color = <span class="string">"fruit_color"</span>;
+    std::<span class="built_in">cout</span> &lt;&lt; <span class="string">"constructor fruit"</span> &lt;&lt; std::endl;
+}
+
+fruit::~fruit()
+{
+    std::<span class="built_in">cout</span> &lt;&lt; <span class="string">"destructor fruit"</span> &lt;&lt; std::endl;
+}
+
+<span class="keyword">void</span> fruit::clearFruitColor()
+{
+    std::<span class="built_in">cout</span> &lt;&lt; <span class="string">"clear fruit color"</span> &lt;&lt; std::endl;
+}
+
+<span class="keyword">void</span> fruit::displayColor()
+{
+    std::<span class="built_in">cout</span> &lt;&lt; <span class="string">"display fruit color: "</span> &lt;&lt; color &lt;&lt; std::endl;
+}
+
+<span class="keyword">void</span> fruit::printColor()
+{
+    std::<span class="built_in">cout</span> &lt;&lt; <span class="string">"print fruit color: "</span> &lt;&lt; color &lt;&lt; std::endl;
+}
+</code></pre><p><strong>apple.h</strong></p>
+<pre><code><span class="preprocessor">#ifndef APPLE_H</span>
+<span class="preprocessor">#<span class="keyword">define</span> APPLE_H</span>
+
+<span class="preprocessor">#<span class="keyword">include</span> &lt;string&gt;</span>
+<span class="preprocessor">#<span class="keyword">include</span> "fruit.h"</span>
+
+<span class="keyword">class</span> apple : <span class="keyword">public</span> fruit {
+    <span class="keyword">public</span>:
+        apple();
+        ~apple();
+        <span class="keyword">void</span> clearAppleColor();
+        <span class="keyword">void</span> displayColor();
+        <span class="keyword">void</span> printColor();
+    <span class="keyword">protected</span>:
+        std::<span class="built_in">string</span> color;
+};
+<span class="preprocessor">#<span class="keyword">endif</span></span>
+</code></pre><p><strong>apple.cpp</strong></p>
+<pre><code><span class="preprocessor">#<span class="keyword">include</span> "apple.h"</span>
+<span class="preprocessor">#<span class="keyword">include</span> &lt;iostream&gt;</span>
+
+apple::apple() : fruit()
+{
+    color = <span class="string">"apple_color"</span>;
+    std::<span class="built_in">cout</span> &lt;&lt; <span class="string">"constructor apple"</span> &lt;&lt; std::endl;
+}
+
+apple::~apple()
+{
+    std::<span class="built_in">cout</span> &lt;&lt; <span class="string">"destructor apple"</span> &lt;&lt; std::endl;
+}
+
+<span class="keyword">void</span> apple::clearAppleColor()
+{
+    std::<span class="built_in">cout</span> &lt;&lt; <span class="string">"clear apple color, "</span>;
+    std::<span class="built_in">cout</span> &lt;&lt; <span class="string">"access fruit::name in apple: "</span> &lt;&lt; name &lt;&lt; std::endl;
+}
+
+<span class="keyword">void</span> apple::displayColor()
+{
+    std::<span class="built_in">cout</span> &lt;&lt; <span class="string">"display apple color: "</span> &lt;&lt; color &lt;&lt; std::endl;
+}
+
+<span class="keyword">void</span> apple::printColor()
+{
+    std::<span class="built_in">cout</span> &lt;&lt; <span class="string">"print apple color: "</span> &lt;&lt; color &lt;&lt; std::endl;
+}
+</code></pre><p><strong>main.cpp</strong></p>
+<pre><code><span class="variable">#include</span> <span class="string">"fruit.h"</span>
+<span class="variable">#include</span> <span class="string">"apple.h"</span>
+
+int main()
+{
+    fruit<span class="subst">*</span> p_f <span class="subst">=</span> <span class="literal">new</span> fruit();
+    apple<span class="subst">*</span> p_a <span class="subst">=</span> <span class="literal">new</span> apple();
+
+    p_f<span class="subst">-&gt;</span>displayColor();
+    p_f<span class="subst">-&gt;</span>printColor();
+    p_f<span class="subst">-&gt;</span>clearFruitColor();
+    <span class="comment">//p_f-&gt;clearAppleColor();</span>
+
+    p_a<span class="subst">-&gt;</span>displayColor();
+    p_a<span class="subst">-&gt;</span>printColor();
+    p_a<span class="subst">-&gt;</span>clearFruitColor();
+    p_a<span class="subst">-&gt;</span>clearAppleColor();
+
+    fruit<span class="subst">*</span> p_fru <span class="subst">=</span> p_a;
+    p_fru<span class="subst">-&gt;</span>displayColor();
+    p_fru<span class="subst">-&gt;</span>printColor();
+    p_fru<span class="subst">-&gt;</span>clearFruitColor();
+    <span class="comment">//p_fru-&gt;clearAppleColor();</span>
+
+    delete p_f;
+    delete p_a;
+}
+</code></pre><p>运行结果如下所示: </p>
+<pre><code><span class="function"><span class="keyword">constructor</span> <span class="title">fruit</span>
+<span class="title">constructor</span> <span class="title">fruit</span>
+<span class="title">constructor</span> <span class="title">apple</span>
+<span class="title">display</span> <span class="title">fruit</span> <span class="title">color</span>:</span> fruit_color
+print fruit color: fruit_color
+clear fruit color
+display apple color: apple_color
+print apple color: apple_color
+clear fruit color
+clear apple color, access fruit::name <span class="keyword">in</span> apple: fruit
+display fruit color: fruit_color
+print apple color: apple_color
+clear fruit color
+<span class="function"><span class="keyword">destructor</span> <span class="title">fruit</span>
+<span class="title">destructor</span> <span class="title">apple</span>
+<span class="title">destructor</span> <span class="title">fruit</span></span>
+</code></pre><h3 id="基类指针与派生类指针">基类指针与派生类指针</h3>
+<ol>
+<li>基类指针可以在不进行显示类型转换的情况下指向派生类对象</li>
+<li>基类引用可以在不进行显示类型转换的情况下引用派生类对象</li>
+<li>基类指针或引用只能用于调用基类方法, 不能调用派生类的方法</li>
+</ol>
+<p>对于前两条, 通常C++要求引用和指针类型与赋给的类型匹配, 但这一规则对继承来说是个例外. 不过这种例外只是单向的:</p>
+<ul>
+<li>可以将派生类对象和地址赋给基类引用和指针</li>
+<li>不可将基类对象和地址赋给派生类引用和指针</li>
+</ul>
+<p>其实, 上述的规则归为一句话, 那就是为了维护一个基本保证: <strong>如果一个对象所提供的性质少于某个指针允诺的话, 该指针就不能指向这个对象</strong>. 这也即”基类指针可以指向派生类对象, 而派生类指针不能指向基类对象”的真实含义.</p>
+<p>第3条, 我们需要格外注意:</p>
+<ul>
+<li>指向派生类的基类指针或者引用, 尽管指向的是派生类对象, 但仍属于基类类型. 其访问范围受其基类类型影响, 因此只能访问基类中可以访问的类型</li>
+<li>对于指向派生类的基类引用, 虽然说引用通常是被引用对象的一个别名, 但这里, 基类引用的访问范围与被引用对象的访问范围明显是不一样的</li>
+<li>对于虚函数, 使用指向派生类的基类指针或基类引用访问时, 将会体现出多态性, 调用的是实际上是派生类的对应函数</li>
+</ul>
+<p>一句话这样总结: 当基类类型的指针或引用使用派生类的对象时, 它对虚函数的调用, 实际上是调用了被指向对象类的函数(注意, 取决于被指向对象). 当它对非虚函数调用时, 会使用基类自身的函数。</p>
+<h3 id="基类派生类中的同名变量">基类派生类中的同名变量</h3>
+<p>成员变量:</p>
+<ul>
+<li>当前类型中是否有该变量的定义<ul>
+<li>无, 去父类中寻找, 注意继承方式</li>
+<li>有, 直接使用</li>
+</ul>
+</li>
+</ul>
+<p>成员函数:</p>
+<ul>
+<li>当前类型中是否有该函数的定义<ul>
+<li>无, 去父类中寻找(亦可是父类中的虚函数), 注意继承方式</li>
+<li>有, 进一步判断, 是否为虚函数</li>
+</ul>
+<ul>
+<li>非虚函数, 直接使用</li>
+<li>虚函数, 那么根据该调用发起者的类型来决定是直接调用还是多态<br>一定为派生类对象的引用或指向派生类对象, 并且该派生类对象中有此虚函数的实例</li>
+</ul>
+</li>
+</ul>
+<p>注意上文中的当前类型是调用发起者的实际类型, 如基类指针指向派生类对象时, 通过该基类指针发起调用, 我们视基类为当前类型, 此时多态; 而如果仅仅是指向该类型对象的该类型指针, 则直接调用其虚函数.</p>
+<h3 id="虚基类的析构函数">虚基类的析构函数</h3>
+<p>凡基类定义有一个(或多个)虚函数, 应该要将其析构函数声明为virtual, 否则在基类指针指向派生类对象时, 自动调用的析构函数将会是基类的析构函数而非派生类的, 这有违多态的设计原则.</p>
+<pre><code>fruit *p_fru = <span class="keyword">new</span> apple();
+<span class="built_in">delete</span> p_fru;
+</code></pre><p>析构函数声明为<code>~fruit()</code>时:</p>
+<pre><code><span class="function"><span class="keyword">constructor</span> <span class="title">fruit</span>
+<span class="title">constructor</span> <span class="title">apple</span>
+<span class="title">destructor</span> <span class="title">fruit</span></span>
+</code></pre><p>析构函数声明为<code>virtual ~fruit()</code>时:</p>
+<pre><code><span class="function"><span class="keyword">constructor</span> <span class="title">fruit</span>
+<span class="title">constructor</span> <span class="title">apple</span>
+<span class="title">destructor</span> <span class="title">apple</span>
+<span class="title">destructor</span> <span class="title">fruit</span></span>
+</code></pre><p>如上述所列代码, 如果我们用基类指针指向新开辟的派生类对象, 因为<strong>non-virtual函数在编译时便已完成解析, 根据该对象被调用时的类型来判断</strong>, 那么delete触发的是基类的析构函数, 而不是派生类的析构函数. 如将基类析构函数声明为virtual, 那么通过虚函数机制, delete调用的便就是派生类的析构函数.</p>
+<h3 id="运行结果分析">运行结果分析</h3>
+<p>最后, 以代码运行结果的分析来做总结. <code>displayColor</code>函数是基类<code>fruit</code>和派生类<code>apple</code>中均有定义的成员函数, <code>printColor</code>被定义为虚函数, 用于实现运行时的多态.</p>
+<p>调用成员函数时, 首先判断有无, 如不存在该函数, 转向到父类中查找, 看是否属于继承过来的函数; 如存在该函数, 再次判断是否为虚函数, 如非虚函数, 可以直接调用, 如是虚函数, 那么需要转而查看派生类中的实现, 同时, 根据实际对象的类型来决定调用哪一个派生类对象的函数实现.</p>
+<pre><code>p_f-&gt;displayColor();
+基类中的非虚函数, 直接调用
+p_f-&gt;printColor();
+基类中的虚函数, 但是该基类指针仅是指向基类对象而非派生类对象, 直接调用(区别于多态)
+p_f-&gt;clearFruitColor();
+基类中的非虚函数, 直接调用
+<span class="comment">//p_f-&gt;clearAppleColor();</span>
+基类中不存在该函数, 亦非从父类继承而来, 不可调用
+
+p_a-&gt;displayColor();
+派生类中的非虚函数, 直接调用
+p_a-&gt;printColor();
+派生类中的虚函数(基类中为虚, 派生类中不声明<span class="keyword">virtual</span>亦为虚), 但是该派生类指针仅指向派生类对象, 直接调用
+p_a-&gt;clearFruitColor();
+派生类中无该函数, 但是public继承自基类, 可以调用
+p_a-&gt;clearAppleColor();
+派生类中的非虚函数, 直接调用, 允许访问基类中的protected成员变量
+
+fruit* p_fru = p_a;
+基类指针指向派生类对象, 指针类型仍然可视为指向基类
+p_fru-&gt;displayColor();
+视指针指向基类, 且基类中存在该非虚函数, 直接调用
+p_fru-&gt;printColor();
+指针指向基类, 但该函数在基类中声明为<span class="keyword">virtual</span>, 所以调用实际对象apple中的函数实现(多态)
+p_fru-&gt;clearFruitColor();
+指向基类, 该函数是基类中的非虚函数, 直接调用
+<span class="comment">//p_fru-&gt;clearAppleColor();</span>
+指向基类, 基类中无该函数, 亦非从父类继承, 不可调用
+</code></pre><h3 id="Reference">Reference</h3>
+<p><a href="http://blog.sina.com.cn/s/blog_8c612cae01011xwk.html" target="_blank" rel="external">基类—派生类—指针</a><br><a href="http://www.csdn123.com/html/itweb/20130828/87498_87497_87496.htm" target="_blank" rel="external">C++中指向派生类的基类指针</a><br><a href="http://blog.csdn.net/zhubo22/article/details/7987766" target="_blank" rel="external">子类定义同名成员变量时的调用继承函数的问题</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2014/12/07/base-class-and-derived-class-related/" data-id="4pmkjnzmhd2cuw2f" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/">c++</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2015/09/01/about-sqlite/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          sqlite数据库
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/11/22/overload-operator-for-class/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">类的运算符重载</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/adb/">adb</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/awk/">awk</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-language/">c language</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/">c++</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep/">grep</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/">jekyll</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/">network</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reading/">reading</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sed/">sed</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqlite/">sqlite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/thinking/">thinking</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/">vim</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/adb/" style="font-size: 10.00px;">adb</a><a href="/tags/android/" style="font-size: 10.00px;">android</a><a href="/tags/awk/" style="font-size: 10.00px;">awk</a><a href="/tags/c-language/" style="font-size: 20.00px;">c language</a><a href="/tags/c/" style="font-size: 15.00px;">c++</a><a href="/tags/github/" style="font-size: 12.50px;">github</a><a href="/tags/grep/" style="font-size: 10.00px;">grep</a><a href="/tags/hexo/" style="font-size: 10.00px;">hexo</a><a href="/tags/jekyll/" style="font-size: 10.00px;">jekyll</a><a href="/tags/life/" style="font-size: 10.00px;">life</a><a href="/tags/linux/" style="font-size: 10.00px;">linux</a><a href="/tags/markdown/" style="font-size: 10.00px;">markdown</a><a href="/tags/network/" style="font-size: 12.50px;">network</a><a href="/tags/reading/" style="font-size: 10.00px;">reading</a><a href="/tags/sed/" style="font-size: 10.00px;">sed</a><a href="/tags/shell/" style="font-size: 12.50px;">shell</a><a href="/tags/sqlite/" style="font-size: 10.00px;">sqlite</a><a href="/tags/thinking/" style="font-size: 17.50px;">thinking</a><a href="/tags/vim/" style="font-size: 10.00px;">vim</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">November 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">October 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">September 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">August 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">July 2013</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">May 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">March 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">January 2013</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/09/01/about-sqlite/">sqlite数据库</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/07/base-class-and-derived-class-related/">基类派生类的畅想</a>
+          </li>
+        
+          <li>
+            <a href="/2014/11/22/overload-operator-for-class/">类的运算符重载</a>
+          </li>
+        
+          <li>
+            <a href="/2014/11/09/static-extern-const/">static-extern-const</a>
+          </li>
+        
+          <li>
+            <a href="/2014/11/04/head-file-and-code-file/">头文件和原文件</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+
+  </div>
+</body>
+</html>

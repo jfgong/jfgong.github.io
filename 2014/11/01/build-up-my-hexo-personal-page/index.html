@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>使用hexo在github上搭建主页 | Keep learning</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="前段时间一直用jekyll在github上搭建的主页，但是当文章数量增多，管理越来越麻烦，看到hexo支持tags，并且可以方便的使用目录分类，所以开始转向hexo阵营。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用hexo在github上搭建主页">
+<meta property="og:url" content="http://yoursite.com/2014/11/01/build-up-my-hexo-personal-page/">
+<meta property="og:site_name" content="Keep learning">
+<meta property="og:description" content="前段时间一直用jekyll在github上搭建的主页，但是当文章数量增多，管理越来越麻烦，看到hexo支持tags，并且可以方便的使用目录分类，所以开始转向hexo阵营。">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用hexo在github上搭建主页">
+<meta name="twitter:description" content="前段时间一直用jekyll在github上搭建的主页，但是当文章数量增多，管理越来越麻烦，看到hexo支持tags，并且可以方便的使用目录分类，所以开始转向hexo阵营。">
+
+  
+    <link rel="alternative" href="/atom.xml" title="Keep learning" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Keep learning</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><input type="submit" value="&#xF002;" class="search-form-submit"><input type="hidden" name="q" value="site:http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-build-up-my-hexo-personal-page" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/11/01/build-up-my-hexo-personal-page/" class="article-date">
+  <time datetime="2014-11-01T12:44:13.000Z" itemprop="datePublished">Nov 1 2014</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      使用hexo在github上搭建主页
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>前段时间一直用jekyll在github上搭建的主页，但是当文章数量增多，管理越来越麻烦，看到hexo支持tags，并且可以方便的使用目录分类，所以开始转向hexo阵营。</p>
+<a id="more"></a>
+
+<h1 id="配置环境">配置环境</h1>
+<p>安装git，<a href="http://git-scm.com/" target="_blank" rel="external">git官网</a><br>安装nodejs，<a href="http://nodejs.org/" target="_blank" rel="external">node.js官网</a><br>安装hexo，<a href="http://hexo.io/" target="_blank" rel="external">hexo官网</a></p>
+<p>以上的环境配置此处不费口舌，可以参考各自的官方网站。</p>
+<h1 id="hexo创建主页">hexo创建主页</h1>
+<p>进入github，创建一个空repository，按照username.github.io的格式命名</p>
+<p>进入任意一个目录，<code>hexo init hexo_blog</code></p>
+<pre><code>cd hexo_blog
+npm <span class="operator"><span class="keyword">install</span>
+hexo <span class="keyword">server</span></span>
+</code></pre><p>至此，已经可以通过<code>localhost:4000</code>来查看新搭建的主页了。</p>
+<h1 id="配置hexo">配置hexo</h1>
+<p>修改配置文件_config.yml</p>
+<pre><code>deploy:
+  type: github
+  repository: git@<span class="filename">github.com</span>: username/<span class="filename">username.github.com.git
+  branch</span>: master
+</code></pre><p>然后执行:</p>
+<pre><code>hexo <span class="keyword">generate</span>
+hexo deploy
+</code></pre><p>其中，generate在本地先把博客生成的一套静态站点放到public文件夹中，而deploy会将public复制到.deploy中。成功发布到github后，可以发现对应repository项目中即是目录.deploy下的文件。</p>
+<p>此时主页已经可以通过username.github.io来访问，剩下来的工作便是绑定域名，即在文件CNAME中写入域名。由于每次执行deploy的时候，master分支所有的文件都会被覆盖，所以最好在source目录下创建这个CNAME文件，这样每次部署就不用动手创建了。</p>
+<p>更新完CNAME并deploy后，CNAME文件便已经push到了项目中，稍微等待一段时间后，就可以使用绑定的域名来访问我们新建的主页了。当然，在此之前你还需要将自己的域名解析到username.github.io，如本主页使用的是DNSPOD提供的域名解析服务。</p>
+<h1 id="使用hexo">使用hexo</h1>
+<p>新建文章并提交</p>
+<pre><code>hexo <span class="keyword">new</span> <span class="string">"postname"</span>
+hexo <span class="keyword">generate</span>
+hexo deploy
+</code></pre><p>用户可以随意修改source/_post中的文件名以及文件内容，重新generate&amp;deploy后，github中原文件被删除，只会保留当前最新的内容。</p>
+<h1 id="备注：">备注：</h1>
+<p>1.在hexo deploy步骤中，可能会遇到以下错误：</p>
+<pre><code>ERROR: Repository <span class="operator">not</span> found.
+fatal: Could <span class="operator">not</span> <span class="built_in">read</span> <span class="built_in">from</span> remote repository.
+Please make sure you have <span class="operator">the</span> correct access rights <span class="operator">and</span> <span class="operator">the</span> repository exists.
+</code></pre><p>此时，我们可以尝试重新配置文件_config.yml</p>
+<pre><code>deploy:
+  <span class="class"><span class="keyword">type</span>: <span class="title">github</span></span>
+  repository: https:<span class="comment">//github.com/username/username.github.io.git</span>
+  branch: master
+</code></pre><p>此外，当deploy提交无效时，可以删除.deploy，然后先generate再deploy</p>
+<p>2.在deploy时，可能会出现错误</p>
+<pre><code><span class="variable">Permission</span> denied (publickey).
+fatal: <span class="variable">Could</span> <span class="keyword">not</span> read from remote repository.
+</code></pre><p>请自行创建key到～/.ssh目录下，然后上传该key文件内容到github中</p>
+<p>3.在hexo init步骤中，可能会遇到以下错误：</p>
+<pre><code><span class="variable">Error</span>: <span class="variable">Theme</span> landscape does <span class="keyword">not</span> exist.
+</code></pre><p>请检查当前执行目录下是否有_config.yml等文件，有的话删除这些文件，或者尝试更改执行目录。</p>
+<h1 id="Reference">Reference</h1>
+<p><a href="http://hackeris.me/2014/04/07/buildhexoingithub/" target="_blank" rel="external">使用Github搭建静态博客(Hexo)</a><br><a href="http://hackeris.me/2014/01/20/git_github1/" target="_blank" rel="external">Git之Github使用(一):Push代码到Github</a><br><a href="http://blog.sina.com.cn/s/blog_53786db50102e9ma.html" target="_blank" rel="external">为github帐号添加SSH keys</a><br><a href="http://angryz.github.io/2014/02/21-permission-denied-when-pushing-to-github/" target="_blank" rel="external">Permission denied when pushing to Github</a><br><a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment manual</a><br><a href="http://blog.fens.me/hexo-blog-github/" target="_blank" rel="external">Hexo在github上构建免费的Web应用</a><br><a href="http://www.21ops.com/linux/10357.html" target="_blank" rel="external">使用hexo+github搭建博客</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2014/11/01/build-up-my-hexo-personal-page/" data-id="9gz2zo1f5pvb093a" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/github/">github</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/network/">network</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2014/11/01/notes-in-hand/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          随手记
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2014/11/01/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Hello World</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/adb/">adb</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/awk/">awk</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-language/">c language</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/">c++</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep/">grep</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/">jekyll</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/">network</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reading/">reading</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sed/">sed</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqlite/">sqlite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/thinking/">thinking</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/">vim</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/adb/" style="font-size: 10.00px;">adb</a><a href="/tags/android/" style="font-size: 10.00px;">android</a><a href="/tags/awk/" style="font-size: 10.00px;">awk</a><a href="/tags/c-language/" style="font-size: 20.00px;">c language</a><a href="/tags/c/" style="font-size: 15.00px;">c++</a><a href="/tags/github/" style="font-size: 12.50px;">github</a><a href="/tags/grep/" style="font-size: 10.00px;">grep</a><a href="/tags/hexo/" style="font-size: 10.00px;">hexo</a><a href="/tags/jekyll/" style="font-size: 10.00px;">jekyll</a><a href="/tags/life/" style="font-size: 10.00px;">life</a><a href="/tags/linux/" style="font-size: 10.00px;">linux</a><a href="/tags/markdown/" style="font-size: 10.00px;">markdown</a><a href="/tags/network/" style="font-size: 12.50px;">network</a><a href="/tags/reading/" style="font-size: 10.00px;">reading</a><a href="/tags/sed/" style="font-size: 10.00px;">sed</a><a href="/tags/shell/" style="font-size: 12.50px;">shell</a><a href="/tags/sqlite/" style="font-size: 10.00px;">sqlite</a><a href="/tags/thinking/" style="font-size: 17.50px;">thinking</a><a href="/tags/vim/" style="font-size: 10.00px;">vim</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">November 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">October 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">September 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">August 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">July 2013</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">May 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">March 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">January 2013</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/09/01/about-sqlite/">sqlite数据库</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/07/base-class-and-derived-class-related/">基类派生类的畅想</a>
+          </li>
+        
+          <li>
+            <a href="/2014/11/22/overload-operator-for-class/">类的运算符重载</a>
+          </li>
+        
+          <li>
+            <a href="/2014/11/09/static-extern-const/">static-extern-const</a>
+          </li>
+        
+          <li>
+            <a href="/2014/11/04/head-file-and-code-file/">头文件和原文件</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>更新照片的文件名 | Keep learning</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="这次国庆回去,拍了一些照片,整理的时候,再次碰到纠结的问题,相机的默认命名方式是在独立目录下使用IMG_1234这种形式,当需要将不同目录下的照片汇总到一起的时候,就会出现重名的现象.这种命名方式几乎想不到有任何的意义,所以准备将之修改为相机中使用时间来命名的方式.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="更新照片的文件名">
+<meta property="og:url" content="http://yoursite.com/2013/10/06/update-name-of-photofile-to-time/">
+<meta property="og:site_name" content="Keep learning">
+<meta property="og:description" content="这次国庆回去,拍了一些照片,整理的时候,再次碰到纠结的问题,相机的默认命名方式是在独立目录下使用IMG_1234这种形式,当需要将不同目录下的照片汇总到一起的时候,就会出现重名的现象.这种命名方式几乎想不到有任何的意义,所以准备将之修改为相机中使用时间来命名的方式.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="更新照片的文件名">
+<meta name="twitter:description" content="这次国庆回去,拍了一些照片,整理的时候,再次碰到纠结的问题,相机的默认命名方式是在独立目录下使用IMG_1234这种形式,当需要将不同目录下的照片汇总到一起的时候,就会出现重名的现象.这种命名方式几乎想不到有任何的意义,所以准备将之修改为相机中使用时间来命名的方式.">
+
+  
+    <link rel="alternative" href="/atom.xml" title="Keep learning" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Keep learning</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><input type="submit" value="&#xF002;" class="search-form-submit"><input type="hidden" name="q" value="site:http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-update-name-of-photofile-to-time" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/10/06/update-name-of-photofile-to-time/" class="article-date">
+  <time datetime="2013-10-06T14:02:45.000Z" itemprop="datePublished">Oct 6 2013</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      更新照片的文件名
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这次国庆回去,拍了一些照片,整理的时候,再次碰到纠结的问题,相机的默认命名方式是在独立目录下使用IMG_1234这种形式,当需要将不同目录下的照片汇总到一起的时候,就会出现重名的现象.这种命名方式几乎想不到有任何的意义,所以准备将之修改为相机中使用时间来命名的方式.</p>
+<a id="more"></a>
+
+<p>查资料发现<code>stat</code>虽然可以查阅文件的访问,修改和状态更新时间,但是并不能获得照片的最原始创建时间即拍摄时间,但是我们在右键属性中却可以看到拍摄的时间,所以可以考虑对照片进行文本处理的方式来获得拍摄信息.</p>
+<p>通过<code>grep -ao</code>过滤得到照片的创建时间</p>
+<pre><code><span class="shebang">#!/bin/sh </span>
+<span class="built_in">source</span>Dir=<span class="variable">$1</span>
+destDir=<span class="variable">$2</span>
+mkdir <span class="variable">$destDir</span>
+filelist=`ls <span class="variable">$sourceDir</span>`
+<span class="built_in">echo</span> <span class="variable">$filelist</span>
+<span class="built_in">echo</span> <span class="string">"total have `ls <span class="variable">$sourceDir</span> | wc -l` files, waiting to change name"</span>
+
+<span class="comment">#filter keywords like "2013:10:06 18:30:56"</span>
+pattern=<span class="string">"[0-9]\{4\}:[0-9]\{2\}:[0-9]\{2\} [0-9]\{2\}:[0-9]\{2\}:[0-9]\{2\}"</span>
+
+<span class="keyword">for</span> oldName <span class="keyword">in</span> <span class="variable">$filelist</span>
+<span class="keyword">do</span>
+    <span class="built_in">echo</span> <span class="string">"Rename <span class="variable">$oldName</span> ......"</span>  
+    <span class="comment">#cannot use '$pattern'</span>
+    shootTime=`grep -ao <span class="string">"<span class="variable">$pattern</span>"</span> <span class="variable">$sourceDir</span>/<span class="variable">$oldName</span> | sort -u`
+
+    <span class="built_in">echo</span> <span class="string">"<span class="variable">$sourceDir</span>/<span class="variable">$oldName</span>'s shoot time is: <span class="variable">$shootTime</span>"</span>
+    base=`<span class="built_in">echo</span> <span class="variable">$shootTime</span> | awk -F<span class="string">"[: ]"</span> <span class="string">'{print $1$2$3"_"$4$5$6}'</span>`
+    <span class="comment">#sed 's\ \:\g' $shootTime</span>
+    <span class="comment">#base=`echo $shootTime | awk -F: '{print $1$2$3"_"$4$5$6}'`</span>
+
+    suffix=`<span class="built_in">echo</span> <span class="variable">$oldName</span> | awk -F. <span class="string">'{print $NF}'</span>`
+    newName=<span class="string">"<span class="variable">$base</span>.<span class="variable">$suffix</span>"</span>
+
+    <span class="built_in">echo</span> <span class="string">"New name is: <span class="variable">$destDir</span>/<span class="variable">$newName</span>"</span>
+    cp <span class="variable">$sourceDir</span>/<span class="variable">$oldName</span> <span class="variable">$destDir</span>/<span class="variable">$newName</span>
+<span class="keyword">done</span>
+</code></pre><p>上述代码中,简单赘述:</p>
+<p>1.<code>grep -ao</code>,其中-a将照片视为文本文件来处理,否则只会提示”Binary file * matches”,而-o使grep只输出匹配项.</p>
+<p>2.其中pattern变量设置的是形如”2013:10:06 18:30:56”类型的关键字模式</p>
+<p>3.<code>awk -F&quot;[: ]&quot;</code>指定:和空格作为间隔符</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2013/10/06/update-name-of-photofile-to-time/" data-id="fb8ajrh01qq01skh" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell/">shell</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2013/11/10/file-operation/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          文件操作
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2013/09/18/perl-learning/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">perl语言学习</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/adb/">adb</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/awk/">awk</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-language/">c language</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/">c++</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep/">grep</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/">jekyll</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/">network</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reading/">reading</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sed/">sed</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqlite/">sqlite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/thinking/">thinking</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/">vim</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/adb/" style="font-size: 10.00px;">adb</a><a href="/tags/android/" style="font-size: 10.00px;">android</a><a href="/tags/awk/" style="font-size: 10.00px;">awk</a><a href="/tags/c-language/" style="font-size: 20.00px;">c language</a><a href="/tags/c/" style="font-size: 15.00px;">c++</a><a href="/tags/github/" style="font-size: 12.50px;">github</a><a href="/tags/grep/" style="font-size: 10.00px;">grep</a><a href="/tags/hexo/" style="font-size: 10.00px;">hexo</a><a href="/tags/jekyll/" style="font-size: 10.00px;">jekyll</a><a href="/tags/life/" style="font-size: 10.00px;">life</a><a href="/tags/linux/" style="font-size: 10.00px;">linux</a><a href="/tags/markdown/" style="font-size: 10.00px;">markdown</a><a href="/tags/network/" style="font-size: 12.50px;">network</a><a href="/tags/reading/" style="font-size: 10.00px;">reading</a><a href="/tags/sed/" style="font-size: 10.00px;">sed</a><a href="/tags/shell/" style="font-size: 12.50px;">shell</a><a href="/tags/sqlite/" style="font-size: 10.00px;">sqlite</a><a href="/tags/thinking/" style="font-size: 17.50px;">thinking</a><a href="/tags/vim/" style="font-size: 10.00px;">vim</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">November 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">October 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">September 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">August 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">July 2013</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">May 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">March 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">January 2013</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/09/01/about-sqlite/">sqlite数据库</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/07/base-class-and-derived-class-related/">基类派生类的畅想</a>
+          </li>
+        
+          <li>
+            <a href="/2014/11/22/overload-operator-for-class/">类的运算符重载</a>
+          </li>
+        
+          <li>
+            <a href="/2014/11/09/static-extern-const/">static-extern-const</a>
+          </li>
+        
+          <li>
+            <a href="/2014/11/04/head-file-and-code-file/">头文件和原文件</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+
+  </div>
+</body>
+</html>

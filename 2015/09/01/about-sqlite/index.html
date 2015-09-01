@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>sqlite数据库 | Keep learning</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="sqlite作为一种轻型的关系型数据库, 它将数据存储在一个db文件中, 因此适合迁移, 但它不适合存储大当量的数据, 而且并发访问性能低, 所以sqlite多被运用在嵌入式领域, 如单用户的本地应用或者移动应用.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sqlite数据库">
+<meta property="og:url" content="http://yoursite.com/2015/09/01/about-sqlite/">
+<meta property="og:site_name" content="Keep learning">
+<meta property="og:description" content="sqlite作为一种轻型的关系型数据库, 它将数据存储在一个db文件中, 因此适合迁移, 但它不适合存储大当量的数据, 而且并发访问性能低, 所以sqlite多被运用在嵌入式领域, 如单用户的本地应用或者移动应用.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="sqlite数据库">
+<meta name="twitter:description" content="sqlite作为一种轻型的关系型数据库, 它将数据存储在一个db文件中, 因此适合迁移, 但它不适合存储大当量的数据, 而且并发访问性能低, 所以sqlite多被运用在嵌入式领域, 如单用户的本地应用或者移动应用.">
+
+  
+    <link rel="alternative" href="/atom.xml" title="Keep learning" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Keep learning</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><input type="submit" value="&#xF002;" class="search-form-submit"><input type="hidden" name="q" value="site:http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-about-sqlite" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/09/01/about-sqlite/" class="article-date">
+  <time datetime="2015-09-01T14:56:47.000Z" itemprop="datePublished">Sep 1 2015</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      sqlite数据库
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>sqlite作为一种轻型的关系型数据库, 它将数据存储在一个db文件中, 因此适合迁移, 但它不适合存储大当量的数据, 而且并发访问性能低, 所以sqlite多被运用在嵌入式领域, 如单用户的本地应用或者移动应用.</p>
+<a id="more"></a>
+
+<p>sqlite使用流程:</p>
+<ul>
+<li>sqlite3_open() 打开数据库</li>
+<li>sqlite3_prepare() 将SQL命令转换成准备语句对象<ul>
+<li>sqlite3_step() 执行一次prepare创建的准备语句</li>
+<li>sqlite3_column() 从step执行结果中获取列数据</li>
+</ul>
+</li>
+<li>sqlite3_finalize() 销毁prepare创建的准备语句, 与prepare相匹配</li>
+<li>sqlite3_close() 关闭数据库连接</li>
+</ul>
+<p>注意:</p>
+<blockquote>
+<p>sqlite3_step()执行一次准备语句使prepare语句执行生效, 单次调用执行到结果的第一行可用位置, 如需继续到第二行, 需要再次调用sqlite3_step, <code>直到这个准备语句完成</code>.</p>
+<p>sqlite3_reset用于重置一个准备语句对象到它的初始状态，然后准备被重新执行, 停在结果的第一行, 再次执行则停在结果的第二行, 以此类推直到最后一行结果.</p>
+<p>INSERT, UPDATE或DELETE对应的准备语句, sqlite3_step()只需执行一次<br>而SELECT语句对应的准备语句, sqlite3_step()可执行多次</p>
+<p>sqlite3_finalize()和sqlite3_prepare()必须一一对应, 在close之前, 每个prepare语句都需要匹配执行finalize</p>
+<p>sqlite3_bind是对insert获得的一行里面的数据的列的各个操作统称</p>
+<p>sqlite3_column是对select查询获得的一行里面的数据的列的各个操作统称, 它从sqlite3_step()执行准备语句得到的结果集的当前行中返回一个列</p>
+<p>sqlite3_exec是sqlite3_prepare(), sqlite3_step()和sqlite3_finalize()的封装, 能让程序多次执行sql语句而不要写许多重复的代码, 并且可在其中设置callback回调函数对sql语句的每个结果行调用.</p>
+</blockquote>
+<figure class="highlight flow"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">st=&gt;start: sqlite3_open():&gt;</div><div class="line">op1=&gt;operation: sqlite3_prepare()</div><div class="line">op2=&gt;operation: sqlite3_bind</div><div class="line">op3=&gt;operation: sqlite3_step()</div><div class="line">op4=&gt;operation: sqlite3_column</div><div class="line">cond1=&gt;condition: Oonly one time?</div><div class="line">op5=&gt;operation: sqlite3_reset()</div><div class="line">op6=&gt;operation: sqlite3_finalize()</div><div class="line">cond2=&gt;condition: Another SQLContinue?</div><div class="line">e=&gt;end: sqlite3_close()</div><div class="line"></div><div class="line">st<span class="variable">-&gt;op1</span><span class="variable">-&gt;op2</span><span class="variable">-&gt;op3</span><span class="variable">-&gt;op4</span><span class="variable">-&gt;cond1</span></div><div class="line">cond1(yes)<span class="variable">-&gt;op6</span></div><div class="line">cond1(no)<span class="variable">-&gt;op5</span></div><div class="line">op5<span class="variable">-&gt;op2</span></div><div class="line">op6<span class="variable">-&gt;cond2</span></div><div class="line">cond2(yes)<span class="variable">-&gt;e</span></div><div class="line">cond2(no)<span class="variable">-&gt;op1</span></div></pre></td></tr></table></figure>
+
+<p>简单示例:</p>
+<pre><code>sqlite3 *<span class="variable">db =</span> NULL;
+sqlite3_stmt *<span class="variable">pstmt =</span> NULL;
+const char *<span class="variable">pztail =</span> NULL;
+<span class="keyword">if</span> (<span class="variable">SQLITE_OK =</span>= sqlite3_open(dbname, &amp;db))
+{
+    string <span class="variable">sqlcmd =</span> <span class="string">"select * from "</span> + tbl_name + <span class="string">";"</span>;
+    <span class="keyword">if</span> (<span class="variable">SQLITE_OK =</span>= sqlite3_prepare_v2(db, sqlcmd.c_str(), sqlcmd.length(), &amp;pstmt, &amp;pztail))
+    {
+        // row number
+        int <span class="variable">stat =</span> sqlite3_step(pstmt);
+        //<span class="keyword">if</span> (<span class="variable">SQLITE_ROW =</span>= stat || <span class="variable">SQLITE_DONE =</span>= stat)
+        while (<span class="variable">SQLITE_ROW =</span>= stat)
+        {
+            // col number
+            int <span class="variable">col_num =</span> sqlite3_column_count(pstmt);
+            int <span class="variable">i_col_val =</span> sqlite3_column_int(pstmt, <span class="number">0</span>);
+            string <span class="variable">s_col_val =</span> (char*)sqlite3_column_text(pstmt, <span class="number">1</span>);
+        }
+    }
+    sqlite3_finalize(pstmt);
+}
+</code></pre><h2 id="其他">其他</h2>
+<p>事务, begin trans, commit trans, 如果在执行中出现错误, 或想取消, 使用rollback trans可回滚事务, 则在开始事务后的操作会被全部取消. begin tran后, 必须执行commit tran和rollback tran中的一个</p>
+<pre><code><span class="operator"><span class="keyword">begin</span> <span class="keyword">transaction</span>     <span class="comment">--开始事务</span>
+..................
+<span class="keyword">commit</span>/<span class="keyword">rollback</span> <span class="keyword">transaction</span>    <span class="comment">--提交/回滚事务</span></span>
+</code></pre><p>获取sqlite数据</p>
+<pre><code>sqlite3 db_name<span class="preprocessor">.db</span> <span class="string">".dump tbl_name"</span>
+</code></pre><h2 id="Reference">Reference</h2>
+<p><a href="http://www.cnblogs.com/kfqcome/archive/2011/06/27/2136999.html" target="_blank" rel="external">sqlite3使用简介</a><br><a href="http://www.oschina.net/translate/sqlite-vs-mysql-vs-postgresql-a-comparison-of-relational-database-management-systems" target="_blank" rel="external">关系数据库比较：SQLite vs MySQL vs PostgreSQL</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/09/01/about-sqlite/" data-id="r1q2micd790xb6lv" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/">c++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sqlite/">sqlite</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2014/12/07/base-class-and-derived-class-related/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">基类派生类的畅想</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/adb/">adb</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/awk/">awk</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-language/">c language</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/">c++</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep/">grep</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/">jekyll</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/">network</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reading/">reading</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sed/">sed</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqlite/">sqlite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/thinking/">thinking</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/">vim</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/adb/" style="font-size: 10.00px;">adb</a><a href="/tags/android/" style="font-size: 10.00px;">android</a><a href="/tags/awk/" style="font-size: 10.00px;">awk</a><a href="/tags/c-language/" style="font-size: 20.00px;">c language</a><a href="/tags/c/" style="font-size: 15.00px;">c++</a><a href="/tags/github/" style="font-size: 12.50px;">github</a><a href="/tags/grep/" style="font-size: 10.00px;">grep</a><a href="/tags/hexo/" style="font-size: 10.00px;">hexo</a><a href="/tags/jekyll/" style="font-size: 10.00px;">jekyll</a><a href="/tags/life/" style="font-size: 10.00px;">life</a><a href="/tags/linux/" style="font-size: 10.00px;">linux</a><a href="/tags/markdown/" style="font-size: 10.00px;">markdown</a><a href="/tags/network/" style="font-size: 12.50px;">network</a><a href="/tags/reading/" style="font-size: 10.00px;">reading</a><a href="/tags/sed/" style="font-size: 10.00px;">sed</a><a href="/tags/shell/" style="font-size: 12.50px;">shell</a><a href="/tags/sqlite/" style="font-size: 10.00px;">sqlite</a><a href="/tags/thinking/" style="font-size: 17.50px;">thinking</a><a href="/tags/vim/" style="font-size: 10.00px;">vim</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">November 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">October 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">September 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">August 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">July 2013</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">May 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">March 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">January 2013</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/09/01/about-sqlite/">sqlite数据库</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/07/base-class-and-derived-class-related/">基类派生类的畅想</a>
+          </li>
+        
+          <li>
+            <a href="/2014/11/22/overload-operator-for-class/">类的运算符重载</a>
+          </li>
+        
+          <li>
+            <a href="/2014/11/09/static-extern-const/">static-extern-const</a>
+          </li>
+        
+          <li>
+            <a href="/2014/11/04/head-file-and-code-file/">头文件和原文件</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2015 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+
+  </div>
+</body>
+</html>
