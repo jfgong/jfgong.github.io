@@ -8,7 +8,7 @@
   <meta name="description" content="sqlite作为一种轻型的关系型数据库, 它将数据存储在一个db文件中, 因此适合迁移, 但它不适合存储大当量的数据, 而且并发访问性能低, 所以sqlite多被运用在嵌入式领域, 如单用户的本地应用或者移动应用.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="sqlite数据库">
-<meta property="og:url" content="http://yoursite.com/2015/09/01/about-sqlite/">
+<meta property="og:url" content="http://yoursite.com/2015/09/01/sqlite-about/">
 <meta property="og:site_name" content="Keep learning">
 <meta property="og:description" content="sqlite作为一种轻型的关系型数据库, 它将数据存储在一个db文件中, 因此适合迁移, 但它不适合存储大当量的数据, 而且并发访问性能低, 所以sqlite多被运用在嵌入式领域, 如单用户的本地应用或者移动应用.">
 <meta name="twitter:card" content="summary">
@@ -61,10 +61,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-about-sqlite" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-sqlite-about" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2015/09/01/about-sqlite/" class="article-date">
-  <time datetime="2015-09-01T14:56:47.000Z" itemprop="datePublished">Sep 1 2015</time>
+    <a href="/2015/09/01/sqlite-about/" class="article-date">
+  <time datetime="2015-09-01T15:25:43.000Z" itemprop="datePublished">Sep 1 2015</time>
 </a>
     
   </div>
@@ -98,15 +98,20 @@
 <li>sqlite3_close() 关闭数据库连接</li>
 </ul>
 <p>注意:</p>
-<blockquote>
-<p>sqlite3_step()执行一次准备语句使prepare语句执行生效, 单次调用执行到结果的第一行可用位置, 如需继续到第二行, 需要再次调用sqlite3_step, <code>直到这个准备语句完成</code>.</p>
-<p>sqlite3_reset用于重置一个准备语句对象到它的初始状态，然后准备被重新执行, 停在结果的第一行, 再次执行则停在结果的第二行, 以此类推直到最后一行结果.</p>
-<p>INSERT, UPDATE或DELETE对应的准备语句, sqlite3_step()只需执行一次<br>而SELECT语句对应的准备语句, sqlite3_step()可执行多次</p>
-<p>sqlite3_finalize()和sqlite3_prepare()必须一一对应, 在close之前, 每个prepare语句都需要匹配执行finalize</p>
-<p>sqlite3_bind是对insert获得的一行里面的数据的列的各个操作统称</p>
-<p>sqlite3_column是对select查询获得的一行里面的数据的列的各个操作统称, 它从sqlite3_step()执行准备语句得到的结果集的当前行中返回一个列</p>
-<p>sqlite3_exec是sqlite3_prepare(), sqlite3_step()和sqlite3_finalize()的封装, 能让程序多次执行sql语句而不要写许多重复的代码, 并且可在其中设置callback回调函数对sql语句的每个结果行调用.</p>
-</blockquote>
+<ol>
+<li><p>sqlite3_step()执行一次准备语句使prepare语句执行生效, 单次调用执行到结果的第一行可用位置, 如需继续到第二行, 需要再次调用sqlite3_step, <code>直到这个准备语句完成</code>.</p>
+</li>
+<li><p>sqlite3_reset用于重置一个准备语句对象到它的初始状态，然后准备被重新执行, 停在结果的第一行, 再次执行则停在结果的第二行, 以此类推直到最后一行结果.</p>
+</li>
+<li><p>INSERT, UPDATE或DELETE对应的准备语句, sqlite3_step()只需执行一次, 而SELECT语句对应的准备语句, sqlite3_step()可执行多次</p>
+</li>
+<li><p>sqlite3_finalize()和sqlite3_prepare()必须一一对应, 在close之前, 每个prepare语句都需要匹配执行finalize</p>
+</li>
+<li><p>sqlite3_bind是对insert获得的一行里面的数据的列的各个操作统称, 而sqlite3_column是对select查询获得的一行里面的数据的列的各个操作统称, 它从sqlite3_step()执行准备语句得到的结果集的当前行中返回一个列</p>
+</li>
+<li><p>sqlite3_exec是sqlite3_prepare(), sqlite3_step()和sqlite3_finalize()的封装, 能让程序多次执行sql语句而不要写许多重复的代码, 并且可在其中设置callback回调函数对sql语句的每个结果行调用.</p>
+</li>
+</ol>
 <figure class="highlight flow"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">st=&gt;start: sqlite3_open():&gt;</div><div class="line">op1=&gt;operation: sqlite3_prepare()</div><div class="line">op2=&gt;operation: sqlite3_bind</div><div class="line">op3=&gt;operation: sqlite3_step()</div><div class="line">op4=&gt;operation: sqlite3_column</div><div class="line">cond1=&gt;condition: Oonly one time?</div><div class="line">op5=&gt;operation: sqlite3_reset()</div><div class="line">op6=&gt;operation: sqlite3_finalize()</div><div class="line">cond2=&gt;condition: Another SQLContinue?</div><div class="line">e=&gt;end: sqlite3_close()</div><div class="line"></div><div class="line">st<span class="variable">-&gt;op1</span><span class="variable">-&gt;op2</span><span class="variable">-&gt;op3</span><span class="variable">-&gt;op4</span><span class="variable">-&gt;cond1</span></div><div class="line">cond1(yes)<span class="variable">-&gt;op6</span></div><div class="line">cond1(no)<span class="variable">-&gt;op5</span></div><div class="line">op5<span class="variable">-&gt;op2</span></div><div class="line">op6<span class="variable">-&gt;cond2</span></div><div class="line">cond2(yes)<span class="variable">-&gt;e</span></div><div class="line">cond2(no)<span class="variable">-&gt;op1</span></div></pre></td></tr></table></figure>
 
 <p>简单示例:</p>
@@ -144,7 +149,7 @@ const char *<span class="variable">pztail =</span> NULL;
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/01/about-sqlite/" data-id="r1q2micd790xb6lv" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/01/sqlite-about/" data-id="jmqd72zqionydwb6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/">c++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sqlite/">sqlite</a></li></ul>
@@ -206,7 +211,7 @@ const char *<span class="variable">pztail =</span> NULL;
       <ul>
         
           <li>
-            <a href="/2015/09/01/about-sqlite/">sqlite数据库</a>
+            <a href="/2015/09/01/sqlite-about/">sqlite数据库</a>
           </li>
         
           <li>
