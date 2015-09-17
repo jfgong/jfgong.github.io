@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Tag: linux | Keep learning</title>
+  <title>Tag: debug | Keep learning</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Keep learning">
-<meta property="og:url" content="http://yoursite.com/tags/linux/">
+<meta property="og:url" content="http://yoursite.com/tags/debug/">
 <meta property="og:site_name" content="Keep learning">
 <meta property="og:description">
 <meta name="twitter:card" content="summary">
@@ -63,10 +63,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-basic-opreation-in-ubuntu" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-valgrind" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2013/07/27/basic-opreation-in-ubuntu/" class="article-date">
-  <time datetime="2013-07-27T13:58:08.000Z" itemprop="datePublished">Jul 27 2013</time>
+    <a href="/2015/09/18/valgrind/" class="article-date">
+  <time datetime="2015-09-17T16:39:02.000Z" itemprop="datePublished">Sep 18 2015</time>
 </a>
     
   </div>
@@ -77,7 +77,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2013/07/27/basic-opreation-in-ubuntu/">liunx基本概念和操作</a>
+      <a class="article-title" href="/2015/09/18/valgrind/">valgrind</a>
     </h1>
   
 
@@ -85,28 +85,20 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="环境变量">环境变量</h1>
-<pre><code>子进程继承父进程的环境变量
-<span class="keyword">source</span> ~/.<span class="keyword">profile</span>    //设置环境变量生效
-/etc/<span class="keyword">profile</span>        //System login <span class="keyword">profile</span>
-$HOME/.<span class="keyword">profile</span>        //User<span class="string">''</span><span class="keyword">s</span> login <span class="keyword">profile</span>
-$HOME/.cshrc        //<span class="keyword">read</span> at beginning of execution by each <span class="keyword">shell</span>
-~/.bashrc <span class="built_in">and</span> ~/.cshrc    //针对不同<span class="keyword">shell</span>的配置文件
-login -&gt; /etc/<span class="keyword">profile</span> -&gt; ~/.<span class="keyword">profile</span>
-<span class="keyword">cat</span> /etc/passwd | <span class="keyword">grep</span> username //可以查看用户默认使用的<span class="keyword">shell</span>
-</code></pre>
+        <p>valgrind是一款开源的调试工具, 可以用于程序的内存泄露检查和性能分析, 其中集成了一系列的调试工具, 如memcheck, callgrind, cachegrind, helgrind, massif等.</p>
+
         
           <p class="article-more-link">
-            <a href="/2013/07/27/basic-opreation-in-ubuntu/#more">Read More</a>
+            <a href="/2015/09/18/valgrind/#more">Read More</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2013/07/27/basic-opreation-in-ubuntu/" data-id="emskv1kp4270es2w" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/18/valgrind/" data-id="vrffi83ncabjqskk" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/debug/">debug</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/valgrind/">valgrind</a></li></ul>
 
     </footer>
   </div>

@@ -3,17 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Tag: linux | Keep learning</title>
+  <title>valgrind | Keep learning</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Keep learning">
-<meta property="og:url" content="http://yoursite.com/tags/linux/">
+  <meta name="description" content="valgrind是一款开源的调试工具, 可以用于程序的内存泄露检查和性能分析, 其中集成了一系列的调试工具, 如memcheck, callgrind, cachegrind, helgrind, massif等.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="valgrind">
+<meta property="og:url" content="http://yoursite.com/2015/09/18/valgrind/">
 <meta property="og:site_name" content="Keep learning">
-<meta property="og:description">
+<meta property="og:description" content="valgrind是一款开源的调试工具, 可以用于程序的内存泄露检查和性能分析, 其中集成了一系列的调试工具, 如memcheck, callgrind, cachegrind, helgrind, massif等.">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Keep learning">
-<meta name="twitter:description">
+<meta name="twitter:title" content="valgrind">
+<meta name="twitter:description" content="valgrind是一款开源的调试工具, 可以用于程序的内存泄露检查和性能分析, 其中集成了一系列的调试工具, 如memcheck, callgrind, cachegrind, helgrind, massif等.">
 
   
     <link rel="alternative" href="/atom.xml" title="Keep learning" type="application/atom+xml">
@@ -61,12 +61,10 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-basic-opreation-in-ubuntu" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-valgrind" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2013/07/27/basic-opreation-in-ubuntu/" class="article-date">
-  <time datetime="2013-07-27T13:58:08.000Z" itemprop="datePublished">Jul 27 2013</time>
+    <a href="/2015/09/18/valgrind/" class="article-date">
+  <time datetime="2015-09-17T16:39:02.000Z" itemprop="datePublished">Sep 18 2015</time>
 </a>
     
   </div>
@@ -76,8 +74,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2013/07/27/basic-opreation-in-ubuntu/">liunx基本概念和操作</a>
+    <h1 class="article-title" itemprop="name">
+      valgrind
     </h1>
   
 
@@ -85,37 +83,107 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="环境变量">环境变量</h1>
-<pre><code>子进程继承父进程的环境变量
-<span class="keyword">source</span> ~/.<span class="keyword">profile</span>    //设置环境变量生效
-/etc/<span class="keyword">profile</span>        //System login <span class="keyword">profile</span>
-$HOME/.<span class="keyword">profile</span>        //User<span class="string">''</span><span class="keyword">s</span> login <span class="keyword">profile</span>
-$HOME/.cshrc        //<span class="keyword">read</span> at beginning of execution by each <span class="keyword">shell</span>
-~/.bashrc <span class="built_in">and</span> ~/.cshrc    //针对不同<span class="keyword">shell</span>的配置文件
-login -&gt; /etc/<span class="keyword">profile</span> -&gt; ~/.<span class="keyword">profile</span>
-<span class="keyword">cat</span> /etc/passwd | <span class="keyword">grep</span> username //可以查看用户默认使用的<span class="keyword">shell</span>
-</code></pre>
-        
-          <p class="article-more-link">
-            <a href="/2013/07/27/basic-opreation-in-ubuntu/#more">Read More</a>
-          </p>
-        
+        <p>valgrind是一款开源的调试工具, 可以用于程序的内存泄露检查和性能分析, 其中集成了一系列的调试工具, 如memcheck, callgrind, cachegrind, helgrind, massif等.</p>
+<a id="more"></a>
+
+<ul>
+<li>memcheck, 用于检测内存的使用问题, 如常见的内存泄露和非法读写等, —tool的默认设置</li>
+<li>callgrind, 获得函数调用关系, 函数运行时间等信息. 常结合callgrind_annotate或者kcachegrind查看log信息</li>
+<li>cachegrind, 统计cache丢失和命中情况</li>
+<li>helgrind, 寻找内存中被多个线程访问, 而又没有加锁的区域</li>
+<li>massif, 堆栈分析器, 检测程序中的堆栈使用情况</li>
+</ul>
+<p>其中, 最常用的是memcheck和callgring, 以下简单示例作一介绍.</p>
+<p>valgrind命令格式:<br>valgrind [valgrind-options] your-prog [your-prog options]</p>
+<p>其中valgrind-options有以下几种:</p>
+<ul>
+<li>—version, 查看版本信息</li>
+<li>—quiet, 只打印错误信息</li>
+<li>—tool, 指定工具, 默认memcheck</li>
+<li>—log-file, 保存log到文件</li>
+<li>—db-attach, 绑定调试器, 默认不指定</li>
+<li>—leak-check=full, 查看内存泄露详细信息</li>
+</ul>
+<p>此外, 要想使valgrind得到调试信息, 需要在gcc编译时加上<code>-g</code>参数, 如<code>gcc -g -o mem_leak mem_leak.c</code></p>
+<pre><code><span class="preprocessor">#<span class="keyword">include</span> &lt;stdio.h&gt;</span>
+<span class="preprocessor">#<span class="keyword">include</span> &lt;stdlib.h&gt;</span>
+
+<span class="keyword">void</span> func()
+{
+    <span class="keyword">int</span>* p = NULL;
+    <span class="keyword">int</span> len = <span class="number">10</span>;
+
+    <span class="comment">// memory leak</span>
+    p = <span class="built_in">malloc</span>(len * <span class="keyword">sizeof</span>(<span class="keyword">int</span>));
+
+    <span class="comment">// heap block overrun</span>
+    p[len] = <span class="number">0</span>;
+}
+
+<span class="keyword">int</span> main()
+{
+    func();
+
+    <span class="comment">// use uninitialised value</span>
+    <span class="keyword">int</span> num;
+    <span class="built_in">printf</span>(<span class="string">"num = %d\n"</span>, num);
+}
+</code></pre><h2 id="memcheck">memcheck</h2>
+<pre><code>valgrind --tool=memcheck --<span class="built_in">log</span>-<span class="keyword">file</span>=leak.<span class="built_in">log</span> ./mem_leak
+</code></pre><p>查看log文件, 搜索关键字, 如<code>Invalid write</code>, <code>LEAK SUMMARY</code>等.</p>
+<pre><code>=<span class="ruby">=<span class="number">21688</span>== <span class="constant">Invalid</span> write of size <span class="number">4</span>
+</span>=<span class="ruby">=<span class="number">21688</span>==    at <span class="number">0x4005BD</span><span class="symbol">:</span> func (mem_leak.<span class="symbol">c:</span><span class="number">13</span>)
+</span>=<span class="ruby">=<span class="number">21688</span>==    by <span class="number">0x4005D6</span><span class="symbol">:</span> main (mem_leak.<span class="symbol">c:</span><span class="number">18</span>)
+</span>=<span class="ruby">=<span class="number">21688</span>==  <span class="constant">Address</span> <span class="number">0x51fd068</span> is <span class="number">0</span> bytes after a block of size <span class="number">40</span> alloc<span class="string">'d
+</span></span>=<span class="ruby">=<span class="number">21688</span>==    at <span class="number">0x4C2AB80</span><span class="symbol">:</span> malloc (<span class="keyword">in</span> /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+</span>=<span class="ruby">=<span class="number">21688</span>==    by <span class="number">0x4005A4</span><span class="symbol">:</span> func (mem_leak.<span class="symbol">c:</span><span class="number">10</span>)
+</span>=<span class="ruby">=<span class="number">21688</span>==    by <span class="number">0x4005D6</span><span class="symbol">:</span> main (mem_leak.<span class="symbol">c:</span><span class="number">18</span>)</span>
+</code></pre><p>在此例中, Invalid write字段, 提示func中在13行处存在非法写内存, 检查发现确实存在写越界的问题. 此外,  LEAK部分, 提示<code>definitely lost: 40 bytes in 1 blocks</code>, 进一步搜索关键字<code>definitely</code>得到如下信息.</p>
+<pre><code>=<span class="ruby">=<span class="number">21729</span>== <span class="number">40</span> bytes <span class="keyword">in</span> <span class="number">1</span> blocks are definitely lost <span class="keyword">in</span> loss record <span class="number">1</span> of <span class="number">1</span>
+</span>=<span class="ruby">=<span class="number">21729</span>==    at <span class="number">0x4C2AB80</span><span class="symbol">:</span> malloc (<span class="keyword">in</span> /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
+</span>=<span class="ruby">=<span class="number">21729</span>==    by <span class="number">0x4005A4</span><span class="symbol">:</span> func (mem_leak.<span class="symbol">c:</span><span class="number">10</span>)
+</span>=<span class="ruby">=<span class="number">21729</span>==    by <span class="number">0x4005D6</span><span class="symbol">:</span> main (mem_leak.<span class="symbol">c:</span><span class="number">18</span>)</span>
+</code></pre><p>根据提示, func函数在10行处申请了未释放的40字节内存.</p>
+<h2 id="callgrind">callgrind</h2>
+<pre><code><span class="attribute">valgrind --tool</span>=<span class="string">callgrind ./memleak </span>
+</code></pre><p>callgrind执行后会在当前目录下生成文件callgrind.out.pid, 如前所述, 此时我们可以使用<code>callgrind_annotate</code>或者<code>kcachegrind</code>来查看程序的函数调用关系, 并根据各函数的执行时间来分析程序的性能瓶颈.</p>
+<h2 id="other">other</h2>
+<p>此外, 我们可以借助调试器来调试valgrind的执行程序</p>
+<pre><code><span class="comment">valgrind</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">db</span><span class="literal">-</span><span class="comment">attach=yes</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">tool=memcheck</span> <span class="string">.</span><span class="comment">/mem_leak</span> 
+</code></pre><p>一旦出现错误, valgrind会自动启动调试器(一般是gdb), 退出gdb后代码又回到valgrind继续执行程序.</p>
+<h1 id="Reference">Reference</h1>
+<ol>
+<li><a href="http://www.cnblogs.com/sunyubo/archive/2010/05/05/2282170.html" target="_blank" rel="external">Valgrind简单用法</a></li>
+<li><a href="http://www.cnblogs.com/wangkangluo1/archive/2012/07/09/2583231.html" target="_blank" rel="external">调试技巧之: valgrind –tool=callgrind &amp; kcachegrind</a></li>
+<li><a href="http://blog.csdn.net/unix21/article/details/8772074" target="_blank" rel="external">使用valgrind分析C程序调用线路图</a></li>
+<li><a href="http://blog.jobbole.com/52090/" target="_blank" rel="external">我常用的Python调试工具</a></li>
+</ol>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2013/07/27/basic-opreation-in-ubuntu/" data-id="emskv1kp4270es2w" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/18/valgrind/" data-id="vrffi83ncabjqskk" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/debug/">debug</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/valgrind/">valgrind</a></li></ul>
 
     </footer>
   </div>
   
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2015/09/01/sqlite-about/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">sqlite数据库</div>
+    </a>
+  
+</nav>
+
+  
 </article>
 
-
-  
-  
 </section>
         
           <aside id="sidebar">
