@@ -87,10 +87,10 @@
 <a id="more"></a>
 
 <ul>
-<li>memcheck, 用于检测内存的使用问题, 如常见的内存泄露和非法读写等, —tool的默认设置</li>
-<li>callgrind, 获得函数调用关系, 函数运行时间等信息. 常结合callgrind_annotate或者kcachegrind查看log信息</li>
+<li>memcheck, 检测内存问题, 如内存泄露和非法读写等, —tool的默认值</li>
+<li>callgrind, 获得函数调用关系, 函数运行时间等信息, 可结合callgrind_annotate或者kcachegrind查看log信息</li>
 <li>cachegrind, 统计cache丢失和命中情况</li>
-<li>helgrind, 寻找内存中被多个线程访问, 而又没有加锁的区域</li>
+<li>helgrind, 检查多线程程序中出现的竞争问题</li>
 <li>massif, 堆栈分析器, 检测程序中的堆栈使用情况</li>
 </ul>
 <p>其中, 最常用的是memcheck和callgring, 以下简单示例作一介绍.</p>
@@ -130,8 +130,8 @@
     <span class="built_in">printf</span>(<span class="string">"num = %d\n"</span>, num);
 }
 </code></pre><h2 id="memcheck">memcheck</h2>
-<pre><code>valgrind --tool=memcheck --<span class="built_in">log</span>-<span class="keyword">file</span>=leak.<span class="built_in">log</span> ./mem_leak
-</code></pre><p>查看log文件, 搜索关键字, 如<code>Invalid write</code>, <code>LEAK SUMMARY</code>等.</p>
+<pre><code>valgrind --tool=memcheck --leak-check=full --<span class="built_in">log</span>-<span class="keyword">file</span>=leak.<span class="built_in">log</span> ./mem_leak
+</code></pre><p>查看log文件<code>leak.log</code>, 搜索关键字, 如<code>Invalid write</code>, <code>LEAK SUMMARY</code>等.</p>
 <pre><code>=<span class="ruby">=<span class="number">21688</span>== <span class="constant">Invalid</span> write of size <span class="number">4</span>
 </span>=<span class="ruby">=<span class="number">21688</span>==    at <span class="number">0x4005BD</span><span class="symbol">:</span> func (mem_leak.<span class="symbol">c:</span><span class="number">13</span>)
 </span>=<span class="ruby">=<span class="number">21688</span>==    by <span class="number">0x4005D6</span><span class="symbol">:</span> main (mem_leak.<span class="symbol">c:</span><span class="number">18</span>)
@@ -139,7 +139,7 @@
 </span></span>=<span class="ruby">=<span class="number">21688</span>==    at <span class="number">0x4C2AB80</span><span class="symbol">:</span> malloc (<span class="keyword">in</span> /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
 </span>=<span class="ruby">=<span class="number">21688</span>==    by <span class="number">0x4005A4</span><span class="symbol">:</span> func (mem_leak.<span class="symbol">c:</span><span class="number">10</span>)
 </span>=<span class="ruby">=<span class="number">21688</span>==    by <span class="number">0x4005D6</span><span class="symbol">:</span> main (mem_leak.<span class="symbol">c:</span><span class="number">18</span>)</span>
-</code></pre><p>在此例中, Invalid write字段, 提示func中在13行处存在非法写内存, 检查发现确实存在写越界的问题. 此外,  LEAK部分, 提示<code>definitely lost: 40 bytes in 1 blocks</code>, 进一步搜索关键字<code>definitely</code>得到如下信息.</p>
+</code></pre><p>在此例中, Invalid write字段, 提示func中在13行处存在非法写操作, 检查发现确实存在写越界的问题. 此外, LEAK部分, 提示<code>definitely lost: 40 bytes in 1 blocks</code>, 进一步搜索关键字<code>definitely</code>得到如下信息.</p>
 <pre><code>=<span class="ruby">=<span class="number">21729</span>== <span class="number">40</span> bytes <span class="keyword">in</span> <span class="number">1</span> blocks are definitely lost <span class="keyword">in</span> loss record <span class="number">1</span> of <span class="number">1</span>
 </span>=<span class="ruby">=<span class="number">21729</span>==    at <span class="number">0x4C2AB80</span><span class="symbol">:</span> malloc (<span class="keyword">in</span> /usr/lib/valgrind/vgpreload_memcheck-amd64-linux.so)
 </span>=<span class="ruby">=<span class="number">21729</span>==    by <span class="number">0x4005A4</span><span class="symbol">:</span> func (mem_leak.<span class="symbol">c:</span><span class="number">10</span>)
@@ -147,16 +147,18 @@
 </code></pre><p>根据提示, func函数在10行处申请了未释放的40字节内存.</p>
 <h2 id="callgrind">callgrind</h2>
 <pre><code><span class="attribute">valgrind --tool</span>=<span class="string">callgrind ./memleak </span>
-</code></pre><p>callgrind执行后会在当前目录下生成文件callgrind.out.pid, 如前所述, 此时我们可以使用<code>callgrind_annotate</code>或者<code>kcachegrind</code>来查看程序的函数调用关系, 并根据各函数的执行时间来分析程序的性能瓶颈.</p>
+</code></pre><p>callgrind执行后会在当前目录下生成文件callgrind.out.pid, 如前所述, 此时我们可以使用<code>callgrind_annotate</code>或者<code>kcachegrind</code>查看程序的函数调用关系, 并根据各函数的执行时间来分析程序的性能瓶颈.</p>
 <h2 id="other">other</h2>
-<p>此外, 我们可以借助调试器来调试valgrind的执行程序</p>
+<p>此外, valgrind还支持使用调试器来调试程序</p>
 <pre><code><span class="comment">valgrind</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">db</span><span class="literal">-</span><span class="comment">attach=yes</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">tool=memcheck</span> <span class="string">.</span><span class="comment">/mem_leak</span> 
-</code></pre><p>一旦出现错误, valgrind会自动启动调试器(一般是gdb), 退出gdb后代码又回到valgrind继续执行程序.</p>
+</code></pre><p>一旦出现错误, valgrind会自动启动调试器(一般是gdb), 退出gdb后程序返回到valgrind继续执行.</p>
 <h1 id="Reference">Reference</h1>
 <ol>
 <li><a href="http://www.cnblogs.com/sunyubo/archive/2010/05/05/2282170.html" target="_blank" rel="external">Valgrind简单用法</a></li>
 <li><a href="http://www.cnblogs.com/wangkangluo1/archive/2012/07/09/2583231.html" target="_blank" rel="external">调试技巧之: valgrind –tool=callgrind &amp; kcachegrind</a></li>
+<li><a href="http://blog.csdn.net/yanghao23/article/details/7514587" target="_blank" rel="external">linux下利用valgrind工具进行内存泄露检测和性能分析</a></li>
 <li><a href="http://blog.csdn.net/unix21/article/details/8772074" target="_blank" rel="external">使用valgrind分析C程序调用线路图</a></li>
+<li><a href="http://www.ibm.com/developerworks/cn/linux/l-cn-valgrind/" target="_blank" rel="external">应用 Valgrind 发现 Linux 程序的内存问题</a></li>
 <li><a href="http://blog.jobbole.com/52090/" target="_blank" rel="external">我常用的Python调试工具</a></li>
 </ol>
 
