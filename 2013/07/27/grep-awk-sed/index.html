@@ -131,20 +131,20 @@ NF(number field)  NR(number <span class="keyword">record</span>)
 
 awk <span class="string">'{if(!lines[$0]){lines[$0]=1;print $0}}'</span> <span class="keyword">file</span>.test    <span class="comment">//删除相同行,可以不连续</span>
 </code></pre><h1 id="sed搜索">sed搜索</h1>
-<pre><code>sed [options] <span class="string">'command'</span> input-<span class="built_in">file</span>(s)
-sed <span class="string">'s/from/to/[gpwn]'</span> <span class="built_in">file</span>.<span class="operator">in</span>   <span class="comment"> //将from替换成to</span>
-sed -n <span class="string">'/pattern/p'</span> <span class="built_in">file</span>.<span class="operator">in</span>   <span class="comment"> //-n取消默认的打印输出</span>
-sed -n <span class="string">'/pattern/='</span> <span class="built_in">file</span>.<span class="operator">in</span>   <span class="comment"> //打印匹配模式的行号,d删除匹配行</span>
-sed <span class="string">'/^$/d'</span> <span class="built_in">file</span>.<span class="operator">in</span>       <span class="comment"> //删除空行</span>
-sed <span class="string">'s/COL\(...\)//g'</span> <span class="built_in">file</span>.<span class="operator">in</span>   <span class="comment"> //删除COL以及其后的3个字母</span>
-sed <span class="string">'s/Mr/&amp; Bruce/g'</span> <span class="built_in">file</span>.<span class="operator">in</span>   <span class="comment"> //在Mr后追加Bruce</span>
-sed <span class="string">'s/Mr/Bruce &amp;/g'</span> <span class="built_in">file</span>.<span class="operator">in</span>   <span class="comment"> //在Mr前追加Bruce</span>
-/pattern/ i\ <span class="operator">a</span>\    c\       <span class="comment"> //i前插a后插,类比vim的insert,c修改行</span>
-<span class="comment">
-//{}在定位行执行命令组,n读取下一行</span>
-sed <span class="string">'/hello/{n;s/world/rmbug\n&amp;/g}'</span> <span class="built_in">file</span>.<span class="operator">in</span>   <span class="comment"> //在world之前插入,可能会截断world所在行</span>
-sed <span class="string">'/hello/n;/world/ i\rmbug'</span> <span class="built_in">file</span>.<span class="operator">in</span>       <span class="comment"> //在含有hello和world的相邻行之间插入rmbug行</span>
-sed <span class="string">'/hello/N;/world/ i\rmbug'</span> <span class="built_in">file</span>.<span class="operator">in</span>       <span class="comment"> //N,读入行与前一行全部作为当前行; n,最新读入行作为当前行</span>
+<pre><code>sed [options] <span class="string">'command'</span> input-<span class="keyword">file</span>(s)
+sed <span class="string">'s/from/to/[gpwn]'</span> <span class="keyword">file</span>.<span class="keyword">in</span>  <span class="comment">//将from替换成to, s后字符作为分隔符, 此处为/</span>
+sed -n <span class="string">'/pattern/p'</span> <span class="keyword">file</span>.<span class="keyword">in</span>     <span class="comment">//-n取消默认的打印输出</span>
+sed -n <span class="string">'/pattern/='</span> <span class="keyword">file</span>.<span class="keyword">in</span>     <span class="comment">//打印匹配模式的行号,d删除匹配行</span>
+sed <span class="string">'/^$/d'</span> <span class="keyword">file</span>.<span class="keyword">in</span>             <span class="comment">//删除空行</span>
+sed <span class="string">'s/COL\(...\)//g'</span> <span class="keyword">file</span>.<span class="keyword">in</span>   <span class="comment">//删除COL以及其后的3个字母</span>
+sed <span class="string">'s/Mr/&amp; Bruce/g'</span> <span class="keyword">file</span>.<span class="keyword">in</span>    <span class="comment">//在Mr后追加Bruce</span>
+sed <span class="string">'s/Mr/Bruce &amp;/g'</span> <span class="keyword">file</span>.<span class="keyword">in</span>    <span class="comment">//在Mr前追加Bruce</span>
+/pattern/ [iac]\                <span class="comment">//i前插a后插,类比vim的insert,c修改行</span>
+
+<span class="comment">//{}在定位行执行命令组,n读取下一行</span>
+sed <span class="string">'/hello/{n;s/world/rmbug\n&amp;/g}'</span> <span class="keyword">file</span>.<span class="keyword">in</span>    <span class="comment">//在world之前插入,可能会截断world所在行</span>
+sed <span class="string">'/hello/n;/world/ i\rmbug'</span> <span class="keyword">file</span>.<span class="keyword">in</span>        <span class="comment">//在含有hello和world的相邻行之间插入rmbug行</span>
+sed <span class="string">'/hello/N;/world/ i\rmbug'</span> <span class="keyword">file</span>.<span class="keyword">in</span>        <span class="comment">//N,读入行与前一行全部作为当前行; n,最新读入行作为当前行</span>
 </code></pre><h1 id="sort排序">sort排序</h1>
 <pre><code><span class="built_in">sort</span> -t: 域<span class="number">0</span> : 域<span class="number">1</span> : 域<span class="number">2</span> : ...   <span class="comment"> //可结合tail,head获得极值</span>
 <span class="built_in">sort</span> -t: -k2 <span class="built_in">file</span>.<span class="operator">in</span>       <span class="comment"> //根据域1来分类,将域看作是从1开始</span>
