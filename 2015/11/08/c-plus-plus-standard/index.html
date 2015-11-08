@@ -100,8 +100,8 @@
 <a id="more"></a>
 
 <p>编码时, 只需要包含需要的头文件(一般在/usr/include中), 就可以使用头文件中extern的新特性了, 编译器会自动链接对应的库文件(一般在/usr/lib中), 找到特性的实现. </p>
-<p>如include头文件stdio.h后, 通过<code>ldd a.out</code>查看动态库的加载情况, 会发现gcc链接了库文件libc.so.6</p>
-<p>那么include的头文件, 它们来自哪里:</p>
+<p>如<code>#include&lt;stdio.h&gt;</code>后, 通过<code>ldd a.out</code>查看动态库的加载情况, 会发现gcc链接了库文件libc.so.6</p>
+<p>那么include的头文件, 它们都来自哪里呢:</p>
 <ul>
 <li><p>Glibc, gnu发布的libc库, 也即c运行库. 提供系统调用和基本函数的C库, 如open, malloc, printf等</p>
 </li>
