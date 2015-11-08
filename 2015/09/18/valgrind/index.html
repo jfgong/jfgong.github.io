@@ -148,7 +148,7 @@
 <h2 id="callgrind">callgrind</h2>
 <pre><code>valgrind --tool=callgrind ./memleak 
 callgrind_annotate --auto=yes callgrind.out.pid &gt; <span class="built_in">log</span>.<span class="keyword">file</span>
-</code></pre><p>callgrind执行后会在当前目录下生成文件callgrind.out.pid, 如前所述, 此时我们可以使用<code>callgrind_annotate</code>将文件内容转换成可读的形式, 或者使用<code>kcachegrind</code>查看图形化的函数调用关系, 并根据各函数的执行时间来分析程序的性能瓶颈.</p>
+</code></pre><p>callgrind执行后会在当前目录下生成文件callgrind.out.pid, 如前所述, 此时我们可以使用<code>callgrind_annotate</code>将文件内容转换成可读的形式, 或者使用<code>kcachegrind</code>查看图形化的函数调用关系, 然后便可根据各函数的执行时间来分析程序的性能瓶颈.</p>
 <h2 id="other">other</h2>
 <p>此外, valgrind还支持使用调试器来调试程序</p>
 <pre><code><span class="comment">valgrind</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">db</span><span class="literal">-</span><span class="comment">attach=yes</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">tool=memcheck</span> <span class="string">.</span><span class="comment">/mem_leak</span> 
