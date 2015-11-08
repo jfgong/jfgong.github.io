@@ -146,7 +146,8 @@
 </span>=<span class="ruby">=<span class="number">21729</span>==    by <span class="number">0x4005D6</span><span class="symbol">:</span> main (mem_leak.<span class="symbol">c:</span><span class="number">18</span>)</span>
 </code></pre><p>根据提示, func函数在10行处申请了未释放的40字节内存.</p>
 <h2 id="callgrind">callgrind</h2>
-<pre><code><span class="attribute">valgrind --tool</span>=<span class="string">callgrind ./memleak </span>
+<pre><code>valgrind --tool=callgrind ./memleak 
+callgrind_annotate --auto=yes callgrind.out.pid &gt; <span class="built_in">log</span>.<span class="keyword">file</span>
 </code></pre><p>callgrind执行后会在当前目录下生成文件callgrind.out.pid, 如前所述, 此时我们可以使用<code>callgrind_annotate</code>或者<code>kcachegrind</code>查看程序的函数调用关系, 并根据各函数的执行时间来分析程序的性能瓶颈.</p>
 <h2 id="other">other</h2>
 <p>此外, valgrind还支持使用调试器来调试程序</p>
