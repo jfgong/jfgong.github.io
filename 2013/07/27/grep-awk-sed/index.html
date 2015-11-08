@@ -120,6 +120,14 @@
 <span class="keyword">grep</span> -rE <span class="string">'string1|string2'</span> *            <span class="comment">//文件中含有string1或string2</span>
 <span class="keyword">grep</span> -rl <span class="string">"string1"</span> * | xargs <span class="keyword">grep</span> -l <span class="string">"string2"</span>    <span class="comment">//文件中含有string1和string2</span>
 <span class="keyword">grep</span> -rn <span class="string">"string"</span> *        <span class="comment">//当前目录下所有文件中搜索字符</span>
+
+set variable <span class="string">"hello"</span>
+# search variables value hello
+<span class="keyword">grep</span> $variable <span class="keyword">file</span>.in
+<span class="keyword">grep</span> <span class="string">"$variable"</span> <span class="keyword">file</span>.in
+
+# search $variable itself
+<span class="keyword">grep</span> <span class="string">'$variable'</span> <span class="keyword">file</span>.in
 </code></pre><h1 id="awk搜索">awk搜索</h1>
 <pre><code>awk [-F field-separator] <span class="string">'command'</span> input-<span class="keyword">file</span>(s)
 记录:    域<span class="number">1</span> # 域<span class="number">2</span> # 域<span class="number">3</span>        <span class="comment">//使用'{print $n}'抽取域</span>
