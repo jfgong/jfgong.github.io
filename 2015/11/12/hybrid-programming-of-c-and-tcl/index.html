@@ -196,52 +196,6 @@ Tcl_Interp* interp = Tcl_CreateInterp();
 
 <span class="comment">// Install Tcl Commands</span>
 Tcl_CreateCommand(Tcl_Interp* ip, (<span class="keyword">char</span>*)<span class="string">"tcl_cmd_name"</span>, (Tcl_CmdProc*)tcl_cmd_func, <span class="literal">NULL</span>, <span class="literal">NULL</span>)
-</code></pre><h2 id="Timer">Timer</h2>
-<table>
-<thead>
-<tr>
-<th>Argument</th>
-<th>Discription</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>int milliseconds</td>
-<td>How many milliseconds to wait before invoking proc</td>
-</tr>
-<tr>
-<td>Tcl_TimerProc *proc</td>
-<td>Procedure to invoke after milliseconds have elapsed</td>
-</tr>
-<tr>
-<td>ClientData clientData</td>
-<td>Arbitrary one-word value to pass to proc</td>
-</tr>
-<tr>
-<td>Tcl_TimerToken token</td>
-<td>Token for previously created timer handler (the return value from some previous call to Tcl_CreateTimerHandler)</td>
-</tr>
-</tbody>
-</table>
-<p>Tcl_TimerToken<br>Tcl_CreateTimerHandler(milliseconds, proc, clientData)<br>Tcl_DeleteTimerHandler(token)</p>
-<pre><code>// Init
-Tcl_TimerToken token = 0;
-token = Tcl_CreateTimerHandler(10, timerProc, (ClientData)cd);
-
-// Run
-void timerProc(ClientData cd)
-{
-    // <span class="operator"><span class="keyword">Use</span> cd <span class="keyword">to</span> <span class="keyword">do</span> something <span class="keyword">in</span> timer
-
-    <span class="keyword">if</span> (token) Tcl_DeleteTimerHandler(token);</span>
-    token = 0;
-
-    token = Tcl_CreateTimerHandler(10, timerProc, (ClientData)cd);
-}
-
-// <span class="operator"><span class="keyword">End</span>
-<span class="keyword">if</span> (token) Tcl_DeleteTimerHandler(token);</span>
-token = 0;
 </code></pre>
       
     </div>
