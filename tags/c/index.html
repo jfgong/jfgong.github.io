@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Tag: c++ | Keep learning</title>
+  <title>Tag: c | Keep learning</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description">
 <meta property="og:type" content="website">
@@ -63,10 +63,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-c-plus-plus-standard" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-hybrid-programming-of-c-and-tcl" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2015/11/08/c-plus-plus-standard/" class="article-date">
-  <time datetime="2015-11-08T03:37:03.000Z" itemprop="datePublished">Nov 8 2015</time>
+    <a href="/2015/11/12/hybrid-programming-of-c-and-tcl/" class="article-date">
+  <time datetime="2015-11-12T13:06:15.000Z" itemprop="datePublished">Nov 12 2015</time>
 </a>
     
   </div>
@@ -77,7 +77,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/11/08/c-plus-plus-standard/">c++标准</a>
+      <a class="article-title" href="/2015/11/12/hybrid-programming-of-c-and-tcl/">c与tcl的混合编程</a>
     </h1>
   
 
@@ -85,161 +85,166 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>c++有着不同的标准, 如c++98, c++03和c++11, 使用最新的c++标准, 编程者需要:</p>
-<ul>
-<li>安装对应的头文件和库文件</li>
-<li>安装对应的编译器</li>
-</ul>
+        <h2 id="Define_in_tcl_and_call_in_c">Define in tcl and call in c</h2>
+<p>int Tcl_Eval(interp, script)</p>
+<table>
+<thead>
+<tr>
+<th>ARGUMENTS</th>
+<th>DESCRIPTION</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tcl_Interp *interp</td>
+<td>Interpreter in which to execute the script. The interpreter’s result is modified to hold the result or error message from the script.</td>
+</tr>
+<tr>
+<td>const char *script</td>
+<td>Points to first byte of script to execute (null-terminated and UTF-8)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="C++_code">C++ code</h3>
+<pre><code><span class="comment">// use func in cpp</span>
+Tcl_Interp *interp;
+<span class="keyword">char</span>* tcl_cmd = <span class="string">"tcl_func args"</span>;
+NSEvalTclCmd(interp, tcl_cmd);
+</code></pre><h3 id="Tcl_code">Tcl code</h3>
+<pre><code><span class="comment"># Define proc in tcl</span>
+<span class="keyword">proc</span> tcl_func {args} {
+   ...
+}
+</code></pre><h3 id="C++_code-1">C++ code</h3>
+<pre><code><span class="comment">#include &lt;tcl.h&gt;</span>
 
-        
-          <p class="article-more-link">
-            <a href="/2015/11/08/c-plus-plus-standard/#more">Read More</a>
-          </p>
-        
+/*
+ *  install tcl func <span class="keyword">in</span> c code
+ *  package c <span class="keyword">interface</span> <span class="keyword">for</span> call tcl command
+ */
+<span class="type">int</span> <span class="type">NSEvalTclCmd</span>(<span class="type">Tcl_Interp</span> *interp, <span class="type">CONST</span> <span class="type">char</span> *tcl_func)
+{
+     // <span class="type">int</span> <span class="type">Tcl_Eval</span>(<span class="type">Tcl_Interp</span> *interp, <span class="keyword">const</span> <span class="type">char</span> *script)
+    <span class="keyword">if</span> (<span class="type">TCL_OK</span> != <span class="type">Tcl_Eval</span>(interp, (<span class="type">char</span>*)tcl_cmd))
+    {
+        // <span class="literal">result</span> value
+        <span class="type">char</span> *<span class="literal">result</span> = interp-&gt;<span class="literal">result</span>;
+        <span class="keyword">if</span> (<span class="type">NULL</span> != <span class="literal">result</span>)
+        {
+            printf(<span class="string">"Error: %s\n"</span>, <span class="literal">result</span>);
+        }
+
+        // error log
+        <span class="type">char</span> *trace = <span class="type">Tcl_GetVar</span>(interp, (<span class="type">char</span>*)<span class="string">"errorInfo"</span>, <span class="type">TCL_GLOBAL_ONLY</span>);
+        <span class="keyword">if</span> (<span class="type">NULL</span> != trace)
+        {
+            printf(<span class="string">"*** TCL TRACE ***\n%s\n"</span>, trace);
+        }
+    }
+}
+</code></pre><h2 id="Define_in_c_and_call_in_tcl">Define in c and call in tcl</h2>
+<p>Tcl_Command Tcl_CreateCommand(interp, cmdName, proc, clientData, deleteProc)</p>
+<table>
+<thead>
+<tr>
+<th>ARGUMENTS</th>
+<th>DESCRIPTION</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tcl_Interp *interp</td>
+<td>Interpreter in which to create new command.</td>
+</tr>
+<tr>
+<td>char *cmdName</td>
+<td>Name of command.</td>
+</tr>
+<tr>
+<td>Tcl_CmdProc *proc</td>
+<td>Implementation of new command: proc will be called whenever cmdName is invoked as a command.</td>
+</tr>
+<tr>
+<td>ClientData clientData</td>
+<td>Arbitrary one-word value to pass to proc and deleteProc.</td>
+</tr>
+<tr>
+<td>Tcl_CmdDeleteProc *deleteProc</td>
+<td>Procedure to call before cmdName is deleted from the interpreter; allows for command-specific cleanup. If NULL, then no procedure is called before the command is deleted.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Tcl_code-1">Tcl code</h3>
+<pre><code><span class="comment"># use command in tcl</span>
+<span class="keyword">set</span> ret [tcl_cmd_name <span class="variable">$arg1</span> <span class="variable">$arg2</span>]
+</code></pre><h3 id="C++_code-1">C++ code</h3>
+<pre><code>// Define func in cpp
+<span class="keyword">int</span> tcl_cmd_func(ClientData <span class="keyword">cd</span>, Tcl_Interp *ip, <span class="keyword">int</span> <span class="built_in">argc</span>, char *<span class="built_in">argv</span>[])
+</code></pre><h3 id="Install_Func">Install Func</h3>
+<pre><code><span class="preprocessor">#include <span class="title">&lt;tcl.h&gt;</span></span>
+Tcl_Interp* interp = Tcl_CreateInterp();
+<span class="keyword">if</span> (TCL_ERROR == Tcl_Init(interp))
+{
+    <span class="comment">// Can not initialize Tcl interperter</span>
+    exit(<span class="number">1</span>);
+}
+
+<span class="comment">// Install Tcl Commands</span>
+Tcl_CreateCommand(Tcl_Interp* ip, (<span class="keyword">char</span>*)<span class="string">"tcl_cmd_name"</span>, (Tcl_CmdProc*)tcl_cmd_func, <span class="literal">NULL</span>, <span class="literal">NULL</span>)
+</code></pre><h2 id="Timer">Timer</h2>
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Discription</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>int milliseconds</td>
+<td>How many milliseconds to wait before invoking proc</td>
+</tr>
+<tr>
+<td>Tcl_TimerProc *proc</td>
+<td>Procedure to invoke after milliseconds have elapsed</td>
+</tr>
+<tr>
+<td>ClientData clientData</td>
+<td>Arbitrary one-word value to pass to proc</td>
+</tr>
+<tr>
+<td>Tcl_TimerToken token</td>
+<td>Token for previously created timer handler (the return value from some previous call to Tcl_CreateTimerHandler)</td>
+</tr>
+</tbody>
+</table>
+<p>Tcl_TimerToken<br>Tcl_CreateTimerHandler(milliseconds, proc, clientData)<br>Tcl_DeleteTimerHandler(token)</p>
+<pre><code>// Init
+Tcl_TimerToken token = 0;
+token = Tcl_CreateTimerHandler(10, timerProc, (ClientData)cd);
+
+// Run
+void timerProc(ClientData cd)
+{
+    // <span class="operator"><span class="keyword">Use</span> cd <span class="keyword">to</span> <span class="keyword">do</span> something <span class="keyword">in</span> timer
+
+    <span class="keyword">if</span> (token) Tcl_DeleteTimerHandler(token);</span>
+    token = 0;
+
+    token = Tcl_CreateTimerHandler(10, timerProc, (ClientData)cd);
+}
+
+// <span class="operator"><span class="keyword">End</span>
+<span class="keyword">if</span> (token) Tcl_DeleteTimerHandler(token);</span>
+token = 0;
+</code></pre>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/11/08/c-plus-plus-standard/" data-id="wm6vbugjd4kto83d" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/12/hybrid-programming-of-c-and-tcl/" data-id="adoo5iel5igun3jx" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/">c++</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-sqlite-about" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/09/01/sqlite-about/" class="article-date">
-  <time datetime="2015-09-01T15:25:43.000Z" itemprop="datePublished">Sep 1 2015</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/09/01/sqlite-about/">sqlite数据库</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>sqlite作为一种轻型的关系型数据库, 它将数据存储在一个db文件中, 因此适合迁移, 但它不适合存储大当量的数据, 而且并发访问性能低, 所以sqlite多被运用在嵌入式领域, 如单用户的本地应用或者移动应用.</p>
-
-        
-          <p class="article-more-link">
-            <a href="/2015/09/01/sqlite-about/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/01/sqlite-about/" data-id="jmqd72zqionydwb6" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/">c++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sqlite/">sqlite</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-base-class-and-derived-class-related" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2014/12/07/base-class-and-derived-class-related/" class="article-date">
-  <time datetime="2014-12-06T17:45:18.000Z" itemprop="datePublished">Dec 7 2014</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/12/07/base-class-and-derived-class-related/">基类派生类的畅想</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>本文结束后, 我们希望可以明白以下几个问题:</p>
-<ul>
-<li>基类指针和派生类指针指向</li>
-<li>基类派生类中使用同名变量</li>
-<li>虚基类的析构函数需要声明为virtual</li>
-</ul>
-
-        
-          <p class="article-more-link">
-            <a href="/2014/12/07/base-class-and-derived-class-related/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/12/07/base-class-and-derived-class-related/" data-id="4pmkjnzmhd2cuw2f" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/">c++</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-overload-operator-for-class" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2014/11/22/overload-operator-for-class/" class="article-date">
-  <time datetime="2014-11-22T10:27:06.000Z" itemprop="datePublished">Nov 22 2014</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/11/22/overload-operator-for-class/">类的运算符重载</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>函数名相同, 在相同的作用域内, 其<strong>参数类型、参数个数，参数顺序</strong>不同等能构成函数重载, 同时在类中, 对于函数名相同的const函数和非const函数能够构成重载, 同时它们被调用的时机为: 如果定义的对象是常对象, 则调用的是const成员函数, 如果定义的对象是非常对象, 则调用重载的非const成员函数.</p>
-
-        
-          <p class="article-more-link">
-            <a href="/2014/11/22/overload-operator-for-class/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/11/22/overload-operator-for-class/" data-id="2h5fn1b2br10s83c" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/">c++</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/">c</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/">c++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tcl/">tcl</a></li></ul>
 
     </footer>
   </div>
@@ -259,7 +264,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/adb/">adb</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/awk/">awk</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-language/">c language</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/">c++</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/debug/">debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep/">grep</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/">jekyll</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/">network</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reading/">reading</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sed/">sed</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqlite/">sqlite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/thinking/">thinking</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/valgrind/">valgrind</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/">vim</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/adb/">adb</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/awk/">awk</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/">c</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-language/">c language</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/">c++</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/debug/">debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep/">grep</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/">jekyll</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/">network</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reading/">reading</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sed/">sed</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqlite/">sqlite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcl/">tcl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/thinking/">thinking</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/valgrind/">valgrind</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/">vim</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -268,7 +273,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/adb/" style="font-size: 10.00px;">adb</a><a href="/tags/android/" style="font-size: 10.00px;">android</a><a href="/tags/awk/" style="font-size: 10.00px;">awk</a><a href="/tags/c-language/" style="font-size: 20.00px;">c language</a><a href="/tags/c/" style="font-size: 16.67px;">c++</a><a href="/tags/debug/" style="font-size: 10.00px;">debug</a><a href="/tags/github/" style="font-size: 13.33px;">github</a><a href="/tags/grep/" style="font-size: 10.00px;">grep</a><a href="/tags/hexo/" style="font-size: 10.00px;">hexo</a><a href="/tags/jekyll/" style="font-size: 10.00px;">jekyll</a><a href="/tags/life/" style="font-size: 10.00px;">life</a><a href="/tags/linux/" style="font-size: 10.00px;">linux</a><a href="/tags/markdown/" style="font-size: 10.00px;">markdown</a><a href="/tags/network/" style="font-size: 13.33px;">network</a><a href="/tags/reading/" style="font-size: 10.00px;">reading</a><a href="/tags/sed/" style="font-size: 10.00px;">sed</a><a href="/tags/shell/" style="font-size: 13.33px;">shell</a><a href="/tags/sqlite/" style="font-size: 10.00px;">sqlite</a><a href="/tags/thinking/" style="font-size: 16.67px;">thinking</a><a href="/tags/valgrind/" style="font-size: 10.00px;">valgrind</a><a href="/tags/vim/" style="font-size: 10.00px;">vim</a>
+      <a href="/tags/adb/" style="font-size: 10.00px;">adb</a><a href="/tags/android/" style="font-size: 10.00px;">android</a><a href="/tags/awk/" style="font-size: 10.00px;">awk</a><a href="/tags/c/" style="font-size: 10.00px;">c</a><a href="/tags/c-language/" style="font-size: 20.00px;">c language</a><a href="/tags/c/" style="font-size: 20.00px;">c++</a><a href="/tags/debug/" style="font-size: 10.00px;">debug</a><a href="/tags/github/" style="font-size: 13.33px;">github</a><a href="/tags/grep/" style="font-size: 10.00px;">grep</a><a href="/tags/hexo/" style="font-size: 10.00px;">hexo</a><a href="/tags/jekyll/" style="font-size: 10.00px;">jekyll</a><a href="/tags/life/" style="font-size: 10.00px;">life</a><a href="/tags/linux/" style="font-size: 10.00px;">linux</a><a href="/tags/markdown/" style="font-size: 10.00px;">markdown</a><a href="/tags/network/" style="font-size: 13.33px;">network</a><a href="/tags/reading/" style="font-size: 10.00px;">reading</a><a href="/tags/sed/" style="font-size: 10.00px;">sed</a><a href="/tags/shell/" style="font-size: 13.33px;">shell</a><a href="/tags/sqlite/" style="font-size: 10.00px;">sqlite</a><a href="/tags/tcl/" style="font-size: 10.00px;">tcl</a><a href="/tags/thinking/" style="font-size: 16.67px;">thinking</a><a href="/tags/valgrind/" style="font-size: 10.00px;">valgrind</a><a href="/tags/vim/" style="font-size: 10.00px;">vim</a>
     </div>
   </div>
 
@@ -277,7 +282,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">November 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">October 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">September 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">August 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">July 2013</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">May 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">March 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">January 2013</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">November 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">October 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">September 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">August 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">July 2013</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">May 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">March 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">January 2013</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -287,6 +292,10 @@
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/11/12/hybrid-programming-of-c-and-tcl/">c与tcl的混合编程</a>
+          </li>
         
           <li>
             <a href="/2015/11/08/c-plus-plus-standard/">c++标准</a>
@@ -302,10 +311,6 @@
         
           <li>
             <a href="/2014/12/07/base-class-and-derived-class-related/">基类派生类的畅想</a>
-          </li>
-        
-          <li>
-            <a href="/2014/11/22/overload-operator-for-class/">类的运算符重载</a>
           </li>
         
       </ul>
