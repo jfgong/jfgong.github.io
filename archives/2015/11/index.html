@@ -85,7 +85,11 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="Define_in_tcl_and_call_in_c">Define in tcl and call in c</h2>
+        <p>Tcl是一种脚本语言, 由John Ousterhout创建. Tcl经常被用于快速原型开发, 脚本编程, GUI编程和测试等方面.</p>
+<p>在Linux系统上研究Tcl/Tk, 需要有两个主要程序. 它们是tclsh和wish. 其中, tclsh是Tcl外壳, 常用于为外壳脚本提供执行环境. Wish类似于tclsh, 它是针对窗口化的GUI环境.</p>
+<!--dmore-->
+
+<h2 id="Define_in_tcl_and_call_in_c">Define in tcl and call in c</h2>
 <p>int Tcl_Eval(interp, script)</p>
 <table>
 <thead>
@@ -97,7 +101,7 @@
 <tbody>
 <tr>
 <td>Tcl_Interp *interp</td>
-<td>Interpreter in which to execute the script. The interpreter’s result is modified to hold the result or error message from the script.</td>
+<td>Interpreter in which to execute the script. The interpreters result is modified to hold the result or error message from the script.</td>
 </tr>
 <tr>
 <td>const char *script</td>
