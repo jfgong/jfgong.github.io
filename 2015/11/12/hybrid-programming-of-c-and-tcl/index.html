@@ -127,7 +127,7 @@ NSEvalTclCmd(interp, tcl_cmd);
  *  install tcl func <span class="keyword">in</span> c code
  *  package c <span class="keyword">interface</span> <span class="keyword">for</span> call tcl command
  */
-<span class="type">int</span> <span class="type">NSEvalTclCmd</span>(<span class="type">Tcl_Interp</span> *interp, <span class="type">CONST</span> <span class="type">char</span> *tcl_func)
+<span class="type">void</span> <span class="type">NSEvalTclCmd</span>(<span class="type">Tcl_Interp</span> *interp, <span class="type">CONST</span> <span class="type">char</span> *tcl_func)
 {
      // <span class="type">int</span> <span class="type">Tcl_Eval</span>(<span class="type">Tcl_Interp</span> *interp, <span class="keyword">const</span> <span class="type">char</span> *script)
     <span class="keyword">if</span> (<span class="type">TCL_OK</span> != <span class="type">Tcl_Eval</span>(interp, (<span class="type">char</span>*)tcl_cmd))
