@@ -8,7 +8,7 @@
   <meta name="description" content="sqlite作为一种轻型的关系型数据库, 它将数据存储在一个db文件中, 因此适合迁移, 但它不适合存储大当量的数据, 而且并发访问性能低, 所以sqlite多被运用在嵌入式领域, 如单用户的本地应用或者移动应用.">
 <meta property="og:type" content="article">
 <meta property="og:title" content="sqlite数据库">
-<meta property="og:url" content="http://yoursite.com/2015/09/01/sqlite-about/">
+<meta property="og:url" content="http://yoursite.com/2015/11/30/sqlite-about/">
 <meta property="og:site_name" content="Keep learning">
 <meta property="og:description" content="sqlite作为一种轻型的关系型数据库, 它将数据存储在一个db文件中, 因此适合迁移, 但它不适合存储大当量的数据, 而且并发访问性能低, 所以sqlite多被运用在嵌入式领域, 如单用户的本地应用或者移动应用.">
 <meta name="twitter:card" content="summary">
@@ -63,8 +63,8 @@
       <div class="outer">
         <section id="main"><article id="post-sqlite-about" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2015/09/01/sqlite-about/" class="article-date">
-  <time datetime="2015-09-01T15:25:43.000Z" itemprop="datePublished">Sep 1 2015</time>
+    <a href="/2015/11/30/sqlite-about/" class="article-date">
+  <time datetime="2015-11-30T14:10:00.000Z" itemprop="datePublished">Nov 30 2015</time>
 </a>
     
   </div>
@@ -142,14 +142,20 @@ const char *<span class="variable">pztail =</span> NULL;
 ..................
 <span class="keyword">commit</span>/<span class="keyword">rollback</span> <span class="keyword">transaction</span>    <span class="comment">--提交/回滚事务</span></span>
 </code></pre><p>获取sqlite数据</p>
-<pre><code>sqlite3 db_name<span class="preprocessor">.db</span> <span class="string">".dump tbl_name"</span>
+<pre><code><span class="preprocessor"># In terminal</span>
+sqlite3 db_name<span class="preprocessor">.db</span> <span class="string">".dump tbl_name"</span>
+sqlite3 db_name<span class="preprocessor">.db</span> <span class="string">"SELECT 'col_name1',col_name2 FROM tbl_name;"</span>
+
+<span class="preprocessor"># In sqlite</span>
+sqlite3 db_name<span class="preprocessor">.db</span>
+sqlite&gt; select <span class="string">"col_name1"</span>,col_name2 from tbl_name<span class="comment">;</span>
 </code></pre><h2 id="Reference">Reference</h2>
 <p><a href="http://www.cnblogs.com/kfqcome/archive/2011/06/27/2136999.html" target="_blank" rel="external">sqlite3使用简介</a><br><a href="http://www.oschina.net/translate/sqlite-vs-mysql-vs-postgresql-a-comparison-of-relational-database-management-systems" target="_blank" rel="external">关系数据库比较：SQLite vs MySQL vs PostgreSQL</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/01/sqlite-about/" data-id="jmqd72zqionydwb6" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/11/30/sqlite-about/" data-id="jmqd72zqionydwb6" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/">c++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sqlite/">sqlite</a></li></ul>
@@ -160,19 +166,10 @@ const char *<span class="variable">pztail =</span> NULL;
     
 <nav id="article-nav">
   
-    <a href="/2015/09/18/valgrind/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          valgrind
-        
-      </div>
-    </a>
   
-  
-    <a href="/2014/12/07/base-class-and-derived-class-related/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2015/11/12/hybrid-programming-of-c-and-tcl/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">基类派生类的畅想</div>
+      <div class="article-nav-title">c与tcl的混合编程</div>
     </a>
   
 </nav>
@@ -208,7 +205,7 @@ const char *<span class="variable">pztail =</span> NULL;
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">November 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">October 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">September 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">August 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">July 2013</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">May 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">March 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">January 2013</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">November 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">October 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">September 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">August 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">July 2013</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">May 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">March 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">January 2013</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -220,6 +217,10 @@ const char *<span class="variable">pztail =</span> NULL;
       <ul>
         
           <li>
+            <a href="/2015/11/30/sqlite-about/">sqlite数据库</a>
+          </li>
+        
+          <li>
             <a href="/2015/11/12/hybrid-programming-of-c-and-tcl/">c与tcl的混合编程</a>
           </li>
         
@@ -229,10 +230,6 @@ const char *<span class="variable">pztail =</span> NULL;
         
           <li>
             <a href="/2015/09/18/valgrind/">valgrind</a>
-          </li>
-        
-          <li>
-            <a href="/2015/09/01/sqlite-about/">sqlite数据库</a>
           </li>
         
           <li>
