@@ -65,7 +65,7 @@
         <section id="main"><article id="post-sqlite-about" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/11/30/sqlite-about/" class="article-date">
-  <time datetime="2015-11-30T15:41:16.000Z" itemprop="datePublished">Nov 30 2015</time>
+  <time datetime="2015-11-30T15:43:24.000Z" itemprop="datePublished">Nov 30 2015</time>
 </a>
     
   </div>
@@ -116,7 +116,7 @@
 <figure class="highlight flow"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">st=&gt;start: sqlite3_open():&gt;</div><div class="line">op1=&gt;operation: sqlite3_prepare()</div><div class="line">op2=&gt;operation: sqlite3_bind</div><div class="line">op3=&gt;operation: sqlite3_step()</div><div class="line">op4=&gt;operation: sqlite3_column</div><div class="line">cond1=&gt;condition: Oonly one time?</div><div class="line">op5=&gt;operation: sqlite3_reset()</div><div class="line">op6=&gt;operation: sqlite3_finalize()</div><div class="line">cond2=&gt;condition: Another SQLContinue?</div><div class="line">e=&gt;end: sqlite3_close()</div><div class="line"></div><div class="line">st<span class="variable">-&gt;op1</span><span class="variable">-&gt;op2</span><span class="variable">-&gt;op3</span><span class="variable">-&gt;op4</span><span class="variable">-&gt;cond1</span></div><div class="line">cond1(yes)<span class="variable">-&gt;op6</span></div><div class="line">cond1(no)<span class="variable">-&gt;op5</span></div><div class="line">op5<span class="variable">-&gt;op2</span></div><div class="line">op6<span class="variable">-&gt;cond2</span></div><div class="line">cond2(yes)<span class="variable">-&gt;e</span></div><div class="line">cond2(no)<span class="variable">-&gt;op1</span></div></pre></td></tr></table></figure>
 
 <p>Sqlite流程图：</p>
-<p><img src="http://7xosgd.com1.z0.glb.clouddn.com/sqlite_flow.jpg" alt="sqlite flow chart"></p>
+<p><img src="http://7xosgd.com1.z0.glb.clouddn.com/sqlite_flow.jpg" alt="Sqlite流程图"></p>
 <p>简单示例:</p>
 <pre><code>sqlite3 *<span class="variable">db =</span> NULL;
 sqlite3_stmt *<span class="variable">pstmt =</span> NULL;
