@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Tag: shell | Keep learning</title>
+  <title>Archives: 2015/12 | Keep learning</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Keep learning">
-<meta property="og:url" content="http://yoursite.com/tags/shell/">
+<meta property="og:url" content="http://yoursite.com/archives/2015/12/">
 <meta property="og:site_name" content="Keep learning">
 <meta property="og:description">
 <meta name="twitter:card" content="summary">
@@ -63,10 +63,10 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-update-name-of-photofile-to-time" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-permission-management-in-program" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2013/10/06/update-name-of-photofile-to-time/" class="article-date">
-  <time datetime="2013-10-06T14:02:45.000Z" itemprop="datePublished">Oct 6 2013</time>
+    <a href="/2015/12/06/permission-management-in-program/" class="article-date">
+  <time datetime="2015-12-06T15:35:49.000Z" itemprop="datePublished">Dec 6 2015</time>
 </a>
     
   </div>
@@ -77,7 +77,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2013/10/06/update-name-of-photofile-to-time/">更新照片的文件名</a>
+      <a class="article-title" href="/2015/12/06/permission-management-in-program/">数据传递与转化中的权限管理</a>
     </h1>
   
 
@@ -85,67 +85,180 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>这次国庆回去,拍了一些照片,整理的时候,再次碰到纠结的问题,相机的默认命名方式是在独立目录下使用IMG_1234这种形式,当需要将不同目录下的照片汇总到一起的时候,就会出现重名的现象.这种命名方式几乎想不到有任何的意义,所以准备将之修改为相机中使用时间来命名的方式.</p>
+        <p>在编程中, 经常会遇到变量与常量的相互赋值, 基类与派生类的相互赋值等问题, 它们有自己的作用, 但是也存在诸多使用上的困惑. 那么它们是否有共通性呢? 基于此, 我们将试着从<code>权限</code>的新角度来重新认识老问题.</p>
+<p>权限, 在传递的过程中, 可以等级的传递, 可以缩减着传递, 但是如果说, 在传递的过程中, 权限被越放越大, 那显然是哪里出了问题. 同理, 在编程语言的语法设计中, 也存在这样的权限收放问题.</p>
+<h2 id="类型转换">类型转换</h2>
+<p>以下从类的类型转换角度作一详细描述, 首先上代码.</p>
+<pre><code><span class="comment">// father.h</span>
+<span class="preprocessor">#ifndef FATHER_H</span>
+<span class="preprocessor">#<span class="keyword">define</span> FATHER_H</span>
 
-        
-          <p class="article-more-link">
-            <a href="/2013/10/06/update-name-of-photofile-to-time/#more">Read More</a>
-          </p>
-        
+<span class="keyword">class</span> Father {
+    <span class="keyword">public</span>:
+        Father();
+        Father(<span class="keyword">int</span> age);
+        <span class="keyword">void</span> displayInfo();
+    <span class="keyword">protected</span>:
+        <span class="keyword">int</span> m_iAge;
+};
+<span class="preprocessor">#<span class="keyword">endif</span></span>
+
+<span class="comment">// father.cpp</span>
+<span class="preprocessor">#<span class="keyword">include</span> "father.h"</span>
+<span class="preprocessor">#<span class="keyword">include</span>&lt;iostream&gt;</span>
+<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;
+
+Father::Father()
+{
+    m_iAge  = <span class="number">30</span>;
+}
+
+Father::Father(<span class="keyword">int</span> age)
+{
+    m_iAge = age;
+}
+
+<span class="keyword">void</span> Father::displayInfo()
+{
+    <span class="built_in">cout</span> &lt;&lt; <span class="string">"Father's info: age = "</span> &lt;&lt; m_iAge &lt;&lt; endl;
+}
+
+<span class="comment">// children.h</span>
+<span class="preprocessor">#ifndef CHILDREN_H</span>
+<span class="preprocessor">#<span class="keyword">define</span> CHILDREN_H</span>
+<span class="preprocessor">#<span class="keyword">include</span> "father.h"</span>
+
+<span class="keyword">class</span> Children: <span class="keyword">public</span> Father {
+    <span class="keyword">public</span>:
+        Children();
+        Children(<span class="keyword">int</span> grade);
+        Children(<span class="keyword">int</span> age, <span class="keyword">int</span> grade);
+        <span class="keyword">void</span> displayInfo();
+    <span class="keyword">private</span>:
+        <span class="keyword">int</span> m_iGrade;
+};
+<span class="preprocessor">#<span class="keyword">endif</span></span>
+
+<span class="comment">// children.cpp</span>
+<span class="preprocessor">#<span class="keyword">include</span> "children.h"</span>
+<span class="preprocessor">#<span class="keyword">include</span> &lt;iostream&gt;</span>
+<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;
+
+Children::Children()
+{
+    m_iGrade  = <span class="number">2</span>;
+}
+
+Children::Children(<span class="keyword">int</span> grade)
+{
+    m_iGrade = grade;
+}
+
+Children::Children(<span class="keyword">int</span> age, <span class="keyword">int</span> grade):Father(age)
+{
+    m_iGrade = grade;
+}
+
+<span class="keyword">void</span> Children::displayInfo()
+{
+    <span class="built_in">cout</span> &lt;&lt; <span class="string">"Children's info: father's age = "</span> &lt;&lt; m_iAge;
+    <span class="built_in">cout</span> &lt;&lt; <span class="string">", grade = "</span> &lt;&lt; m_iGrade &lt;&lt; endl;
+}
+</code></pre><p>基于以上的类定义, 我们开始编写自己的测试函数:</p>
+<pre><code>Father fa(<span class="number">25</span>)<span class="comment">;</span>
+fa.displayInfo()<span class="comment">;</span>
+
+Children <span class="number">ch</span>(<span class="number">28</span>, <span class="number">5</span>)<span class="comment">;</span>
+<span class="number">ch</span>.displayInfo()<span class="comment">;</span>
+
+//权限收缩, 截取Children中的Father部分
+Father ch2fa = <span class="number">ch</span><span class="comment">;</span>
+ch2fa.displayInfo()<span class="comment">;</span>
+
+//权限扩张, 编译报错
+//Children <span class="number">fa2ch</span> = fa<span class="comment">;</span>
+//<span class="number">fa2ch</span>.displayInfo()<span class="comment">;</span>
+</code></pre><p>将<strong>派生类对象赋值给基类对象</strong>时, 权限是收缩的, 这个赋值是<strong>安全</strong>的, 结果就是基类对象获得派生类对象中的基类部分, 而丢弃其它的派生类独有的部分. 如上述代码所示, 基类对象ch2fa获得派生类对象ch的基类部分<code>m_iAge</code>即28, 而丢弃了派生类对象ch独有的<code>m_iGrade</code>即5.</p>
+<pre><code>Fathe<span class="string">r's info: age = 25
+Children'</span>s info: fathe<span class="string">r's age = 28, grade = 5
+Father'</span>s info: age = <span class="number">28</span>
+</code></pre><p>而将<strong>基类对象赋值给派生类对象</strong>时, 权限是放大的, 这个赋值是<strong>不安全</strong>的, 编译器会提示错误信息</p>
+<blockquote>
+<p>error: conversion from ‘Father’ to non-scalar type ‘Children’ requested Children fa2ch = fa;</p>
+</blockquote>
+<p>同样的, 我们来测试类指针之间的赋值转换</p>
+<pre><code>Father *pf = <span class="keyword">new</span> Father(<span class="number">25</span>);
+pf<span class="variable">-&gt;displayInfo</span>();
+
+Children *pc = <span class="keyword">new</span> Children(<span class="number">28</span>, <span class="number">5</span>);
+pc<span class="variable">-&gt;displayInfo</span>();
+
+Father *ch2fa = pc;
+ch2fa<span class="variable">-&gt;displayInfo</span>();
+
+<span class="comment">//Children *fa2ch = pf;</span>
+<span class="comment">//Children *fa2ch = (Children*)pf;</span>
+<span class="comment">//fa2ch-&gt;displayInfo();</span>
+</code></pre><p>将<strong>派生类指针赋值给基类指针</strong>时, 权限是收缩的, 这个赋值是<strong>安全</strong>的, 结果就是基类指针指向派生类对象的起始部分, 即派生类对象中的基类部分. 如上述代码所示, 基类指针ch2fa可以访问到派生类对象的基类部分<code>m_iAge</code>即28.</p>
+<pre><code>Fathe<span class="string">r's info: age = 25
+Children'</span>s info: fathe<span class="string">r's age = 28, grade = 5
+Father'</span>s info: age = <span class="number">28</span>
+</code></pre><p>而将<strong>基类指针赋值给派生类指针</strong>时, 权限是放大的, 这个赋值是<strong>不安全</strong>的, 如<code>Children *fa2ch = pf;</code>, 编译器会提示错误信息</p>
+<blockquote>
+<p>error: invalid conversion from ‘Father<em>’ to ‘Children</em>’ [-fpermissive] Children *fa2ch = pf;</p>
+</blockquote>
+<p>如果强制转换基类指针的类型, 如<code>Children *fa2ch = (Children*)pf;</code>, 可以通过编译, 在本机执行中, 获得如下结果:</p>
+<pre><code>Children's info: father's age = <span class="number">25</span>, grade = <span class="number">0</span>
+</code></pre><p>即便已经完成执行, 但是也要注意到其中的隐患, 因为这是一个权限放大的过程, 通过派生类指针访问基类对象本身就是有风险的, 尤其是在访问到派生类独有的数据如<code>m_iGrage</code>时, 程序存在随机的未知风险.</p>
+<h2 id="变量与常量">变量与常量</h2>
+<p>在函数的形参中, 经常将参数设置为const类型, 这可以避免参数在函数中被修改, 从而在编译器级别杜绝参数被编辑的错误隐患. 同样的, 我们也可以将const的赋值问题纳入权限管理的范畴.</p>
+<table>
+<thead>
+<tr>
+<th>const用法</th>
+<th>释义: 修饰其后的关键字</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>const int *p = &a;</td>
+<td>修饰int, <code>*p</code>指向的int是<strong>常量</strong>, 但p依然是<strong>变量</strong></td>
+</tr>
+<tr>
+<td>int const *p = &a;</td>
+<td>修饰<code>*p</code>, <code>*p</code>是<strong>常量</strong>, 但p依然是<strong>变量</strong></td>
+</tr>
+<tr>
+<td>int* const p = &a;</td>
+<td>修饰p, p是<strong>常量</strong></td>
+</tr>
+<tr>
+<td>int x = 3; const int&amp; y = x;</td>
+<td>常量引用, x是<strong>变量</strong>, y是<strong>常量</strong></td>
+</tr>
+<tr>
+<td>const int x; int *y = &x;</td>
+<td>错误, 权限放大</td>
+</tr>
+<tr>
+<td>int x; const int *y = &x;</td>
+<td>正确, 权限收缩</td>
+</tr>
+</tbody>
+</table>
+<h2 id="环境">环境</h2>
+<ul>
+<li>Linux G480 3.13.0-32-generic</li>
+<li>gcc version 4.8.2 (Ubuntu 4.8.2-19ubuntu1)</li>
+</ul>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2013/10/06/update-name-of-photofile-to-time/" data-id="fb8ajrh01qq01skh" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/12/06/permission-management-in-program/" data-id="ul3weg1byacug8op" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell/">shell</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-shell-learning" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2013/07/23/shell-learning/" class="article-date">
-  <time datetime="2013-07-23T13:57:18.000Z" itemprop="datePublished">Jul 23 2013</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2013/07/23/shell-learning/">shell学习笔记</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="用户默认的文件权限模式:umask">用户默认的文件权限模式:umask</h1>
-<h1 id="环境变量">环境变量</h1>
-<pre><code><span class="built_in">echo</span> <span class="string">"The PATH is: <span class="variable">${PATH:-not set}</span>"</span>    //判断环境变量是否设置
-<span class="built_in">echo</span> <span class="string">"The TIME is: <span class="variable">${TIME:=15:37}</span>"</span>    //若未设置,顺便赋值
-</code></pre>
-        
-          <p class="article-more-link">
-            <a href="/2013/07/23/shell-learning/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2013/07/23/shell-learning/" data-id="yrplm6gg5b391qyw" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell/">shell</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/">c++</a></li></ul>
 
     </footer>
   </div>

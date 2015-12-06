@@ -63,6 +63,210 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-permission-management-in-program" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/12/06/permission-management-in-program/" class="article-date">
+  <time datetime="2015-12-06T15:35:49.000Z" itemprop="datePublished">Dec 6 2015</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/12/06/permission-management-in-program/">数据传递与转化中的权限管理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在编程中, 经常会遇到变量与常量的相互赋值, 基类与派生类的相互赋值等问题, 它们有自己的作用, 但是也存在诸多使用上的困惑. 那么它们是否有共通性呢? 基于此, 我们将试着从<code>权限</code>的新角度来重新认识老问题.</p>
+<p>权限, 在传递的过程中, 可以等级的传递, 可以缩减着传递, 但是如果说, 在传递的过程中, 权限被越放越大, 那显然是哪里出了问题. 同理, 在编程语言的语法设计中, 也存在这样的权限收放问题.</p>
+<h2 id="类型转换">类型转换</h2>
+<p>以下从类的类型转换角度作一详细描述, 首先上代码.</p>
+<pre><code><span class="comment">// father.h</span>
+<span class="preprocessor">#ifndef FATHER_H</span>
+<span class="preprocessor">#<span class="keyword">define</span> FATHER_H</span>
+
+<span class="keyword">class</span> Father {
+    <span class="keyword">public</span>:
+        Father();
+        Father(<span class="keyword">int</span> age);
+        <span class="keyword">void</span> displayInfo();
+    <span class="keyword">protected</span>:
+        <span class="keyword">int</span> m_iAge;
+};
+<span class="preprocessor">#<span class="keyword">endif</span></span>
+
+<span class="comment">// father.cpp</span>
+<span class="preprocessor">#<span class="keyword">include</span> "father.h"</span>
+<span class="preprocessor">#<span class="keyword">include</span>&lt;iostream&gt;</span>
+<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;
+
+Father::Father()
+{
+    m_iAge  = <span class="number">30</span>;
+}
+
+Father::Father(<span class="keyword">int</span> age)
+{
+    m_iAge = age;
+}
+
+<span class="keyword">void</span> Father::displayInfo()
+{
+    <span class="built_in">cout</span> &lt;&lt; <span class="string">"Father's info: age = "</span> &lt;&lt; m_iAge &lt;&lt; endl;
+}
+
+<span class="comment">// children.h</span>
+<span class="preprocessor">#ifndef CHILDREN_H</span>
+<span class="preprocessor">#<span class="keyword">define</span> CHILDREN_H</span>
+<span class="preprocessor">#<span class="keyword">include</span> "father.h"</span>
+
+<span class="keyword">class</span> Children: <span class="keyword">public</span> Father {
+    <span class="keyword">public</span>:
+        Children();
+        Children(<span class="keyword">int</span> grade);
+        Children(<span class="keyword">int</span> age, <span class="keyword">int</span> grade);
+        <span class="keyword">void</span> displayInfo();
+    <span class="keyword">private</span>:
+        <span class="keyword">int</span> m_iGrade;
+};
+<span class="preprocessor">#<span class="keyword">endif</span></span>
+
+<span class="comment">// children.cpp</span>
+<span class="preprocessor">#<span class="keyword">include</span> "children.h"</span>
+<span class="preprocessor">#<span class="keyword">include</span> &lt;iostream&gt;</span>
+<span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;
+
+Children::Children()
+{
+    m_iGrade  = <span class="number">2</span>;
+}
+
+Children::Children(<span class="keyword">int</span> grade)
+{
+    m_iGrade = grade;
+}
+
+Children::Children(<span class="keyword">int</span> age, <span class="keyword">int</span> grade):Father(age)
+{
+    m_iGrade = grade;
+}
+
+<span class="keyword">void</span> Children::displayInfo()
+{
+    <span class="built_in">cout</span> &lt;&lt; <span class="string">"Children's info: father's age = "</span> &lt;&lt; m_iAge;
+    <span class="built_in">cout</span> &lt;&lt; <span class="string">", grade = "</span> &lt;&lt; m_iGrade &lt;&lt; endl;
+}
+</code></pre><p>基于以上的类定义, 我们开始编写自己的测试函数:</p>
+<pre><code>Father fa(<span class="number">25</span>)<span class="comment">;</span>
+fa.displayInfo()<span class="comment">;</span>
+
+Children <span class="number">ch</span>(<span class="number">28</span>, <span class="number">5</span>)<span class="comment">;</span>
+<span class="number">ch</span>.displayInfo()<span class="comment">;</span>
+
+//权限收缩, 截取Children中的Father部分
+Father ch2fa = <span class="number">ch</span><span class="comment">;</span>
+ch2fa.displayInfo()<span class="comment">;</span>
+
+//权限扩张, 编译报错
+//Children <span class="number">fa2ch</span> = fa<span class="comment">;</span>
+//<span class="number">fa2ch</span>.displayInfo()<span class="comment">;</span>
+</code></pre><p>将<strong>派生类对象赋值给基类对象</strong>时, 权限是收缩的, 这个赋值是<strong>安全</strong>的, 结果就是基类对象获得派生类对象中的基类部分, 而丢弃其它的派生类独有的部分. 如上述代码所示, 基类对象ch2fa获得派生类对象ch的基类部分<code>m_iAge</code>即28, 而丢弃了派生类对象ch独有的<code>m_iGrade</code>即5.</p>
+<pre><code>Fathe<span class="string">r's info: age = 25
+Children'</span>s info: fathe<span class="string">r's age = 28, grade = 5
+Father'</span>s info: age = <span class="number">28</span>
+</code></pre><p>而将<strong>基类对象赋值给派生类对象</strong>时, 权限是放大的, 这个赋值是<strong>不安全</strong>的, 编译器会提示错误信息</p>
+<blockquote>
+<p>error: conversion from ‘Father’ to non-scalar type ‘Children’ requested Children fa2ch = fa;</p>
+</blockquote>
+<p>同样的, 我们来测试类指针之间的赋值转换</p>
+<pre><code>Father *pf = <span class="keyword">new</span> Father(<span class="number">25</span>);
+pf<span class="variable">-&gt;displayInfo</span>();
+
+Children *pc = <span class="keyword">new</span> Children(<span class="number">28</span>, <span class="number">5</span>);
+pc<span class="variable">-&gt;displayInfo</span>();
+
+Father *ch2fa = pc;
+ch2fa<span class="variable">-&gt;displayInfo</span>();
+
+<span class="comment">//Children *fa2ch = pf;</span>
+<span class="comment">//Children *fa2ch = (Children*)pf;</span>
+<span class="comment">//fa2ch-&gt;displayInfo();</span>
+</code></pre><p>将<strong>派生类指针赋值给基类指针</strong>时, 权限是收缩的, 这个赋值是<strong>安全</strong>的, 结果就是基类指针指向派生类对象的起始部分, 即派生类对象中的基类部分. 如上述代码所示, 基类指针ch2fa可以访问到派生类对象的基类部分<code>m_iAge</code>即28.</p>
+<pre><code>Fathe<span class="string">r's info: age = 25
+Children'</span>s info: fathe<span class="string">r's age = 28, grade = 5
+Father'</span>s info: age = <span class="number">28</span>
+</code></pre><p>而将<strong>基类指针赋值给派生类指针</strong>时, 权限是放大的, 这个赋值是<strong>不安全</strong>的, 如<code>Children *fa2ch = pf;</code>, 编译器会提示错误信息</p>
+<blockquote>
+<p>error: invalid conversion from ‘Father<em>’ to ‘Children</em>’ [-fpermissive] Children *fa2ch = pf;</p>
+</blockquote>
+<p>如果强制转换基类指针的类型, 如<code>Children *fa2ch = (Children*)pf;</code>, 可以通过编译, 在本机执行中, 获得如下结果:</p>
+<pre><code>Children's info: father's age = <span class="number">25</span>, grade = <span class="number">0</span>
+</code></pre><p>即便已经完成执行, 但是也要注意到其中的隐患, 因为这是一个权限放大的过程, 通过派生类指针访问基类对象本身就是有风险的, 尤其是在访问到派生类独有的数据如<code>m_iGrage</code>时, 程序存在随机的未知风险.</p>
+<h2 id="变量与常量">变量与常量</h2>
+<p>在函数的形参中, 经常将参数设置为const类型, 这可以避免参数在函数中被修改, 从而在编译器级别杜绝参数被编辑的错误隐患. 同样的, 我们也可以将const的赋值问题纳入权限管理的范畴.</p>
+<table>
+<thead>
+<tr>
+<th>const用法</th>
+<th>释义: 修饰其后的关键字</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>const int *p = &a;</td>
+<td>修饰int, <code>*p</code>指向的int是<strong>常量</strong>, 但p依然是<strong>变量</strong></td>
+</tr>
+<tr>
+<td>int const *p = &a;</td>
+<td>修饰<code>*p</code>, <code>*p</code>是<strong>常量</strong>, 但p依然是<strong>变量</strong></td>
+</tr>
+<tr>
+<td>int* const p = &a;</td>
+<td>修饰p, p是<strong>常量</strong></td>
+</tr>
+<tr>
+<td>int x = 3; const int&amp; y = x;</td>
+<td>常量引用, x是<strong>变量</strong>, y是<strong>常量</strong></td>
+</tr>
+<tr>
+<td>const int x; int *y = &x;</td>
+<td>错误, 权限放大</td>
+</tr>
+<tr>
+<td>int x; const int *y = &x;</td>
+<td>正确, 权限收缩</td>
+</tr>
+</tbody>
+</table>
+<h2 id="环境">环境</h2>
+<ul>
+<li>Linux G480 3.13.0-32-generic</li>
+<li>gcc version 4.8.2 (Ubuntu 4.8.2-19ubuntu1)</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/12/06/permission-management-in-program/" data-id="ul3weg1byacug8op" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/">c++</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-hybrid-programming-of-c-and-tcl" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/11/12/hybrid-programming-of-c-and-tcl/" class="article-date">
@@ -255,7 +459,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/adb/">adb</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/awk/">awk</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/">c</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-language/">c language</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/">c++</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/debug/">debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep/">grep</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/">jekyll</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/">network</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reading/">reading</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sed/">sed</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqlite/">sqlite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcl/">tcl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/thinking/">thinking</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/valgrind/">valgrind</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/">vim</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/adb/">adb</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/awk/">awk</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/">c</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-language/">c language</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/">c++</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/debug/">debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep/">grep</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/">jekyll</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/">network</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reading/">reading</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sed/">sed</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqlite/">sqlite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcl/">tcl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/thinking/">thinking</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/valgrind/">valgrind</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/">vim</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -264,7 +468,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/adb/" style="font-size: 10.00px;">adb</a><a href="/tags/android/" style="font-size: 10.00px;">android</a><a href="/tags/awk/" style="font-size: 10.00px;">awk</a><a href="/tags/c/" style="font-size: 10.00px;">c</a><a href="/tags/c-language/" style="font-size: 20.00px;">c language</a><a href="/tags/c/" style="font-size: 20.00px;">c++</a><a href="/tags/debug/" style="font-size: 10.00px;">debug</a><a href="/tags/github/" style="font-size: 13.33px;">github</a><a href="/tags/grep/" style="font-size: 10.00px;">grep</a><a href="/tags/hexo/" style="font-size: 10.00px;">hexo</a><a href="/tags/jekyll/" style="font-size: 10.00px;">jekyll</a><a href="/tags/life/" style="font-size: 10.00px;">life</a><a href="/tags/linux/" style="font-size: 10.00px;">linux</a><a href="/tags/markdown/" style="font-size: 10.00px;">markdown</a><a href="/tags/network/" style="font-size: 13.33px;">network</a><a href="/tags/reading/" style="font-size: 10.00px;">reading</a><a href="/tags/sed/" style="font-size: 10.00px;">sed</a><a href="/tags/shell/" style="font-size: 13.33px;">shell</a><a href="/tags/sqlite/" style="font-size: 10.00px;">sqlite</a><a href="/tags/tcl/" style="font-size: 10.00px;">tcl</a><a href="/tags/thinking/" style="font-size: 16.67px;">thinking</a><a href="/tags/valgrind/" style="font-size: 10.00px;">valgrind</a><a href="/tags/vim/" style="font-size: 10.00px;">vim</a>
+      <a href="/tags/adb/" style="font-size: 10.00px;">adb</a><a href="/tags/android/" style="font-size: 10.00px;">android</a><a href="/tags/awk/" style="font-size: 10.00px;">awk</a><a href="/tags/c/" style="font-size: 10.00px;">c</a><a href="/tags/c-language/" style="font-size: 17.50px;">c language</a><a href="/tags/c/" style="font-size: 20.00px;">c++</a><a href="/tags/debug/" style="font-size: 10.00px;">debug</a><a href="/tags/github/" style="font-size: 12.50px;">github</a><a href="/tags/grep/" style="font-size: 10.00px;">grep</a><a href="/tags/hexo/" style="font-size: 10.00px;">hexo</a><a href="/tags/jekyll/" style="font-size: 10.00px;">jekyll</a><a href="/tags/life/" style="font-size: 10.00px;">life</a><a href="/tags/linux/" style="font-size: 10.00px;">linux</a><a href="/tags/markdown/" style="font-size: 10.00px;">markdown</a><a href="/tags/network/" style="font-size: 12.50px;">network</a><a href="/tags/reading/" style="font-size: 10.00px;">reading</a><a href="/tags/sed/" style="font-size: 10.00px;">sed</a><a href="/tags/shell/" style="font-size: 12.50px;">shell</a><a href="/tags/sqlite/" style="font-size: 10.00px;">sqlite</a><a href="/tags/tcl/" style="font-size: 10.00px;">tcl</a><a href="/tags/thinking/" style="font-size: 15.00px;">thinking</a><a href="/tags/valgrind/" style="font-size: 10.00px;">valgrind</a><a href="/tags/vim/" style="font-size: 10.00px;">vim</a>
     </div>
   </div>
 
@@ -273,7 +477,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">November 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">October 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">September 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">August 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">July 2013</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">May 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">March 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">January 2013</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">November 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">October 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">September 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">August 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">July 2013</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">May 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">March 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">January 2013</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -283,6 +487,10 @@
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/12/06/permission-management-in-program/">数据传递与转化中的权限管理</a>
+          </li>
         
           <li>
             <a href="/2015/11/12/hybrid-programming-of-c-and-tcl/">c与tcl的混合编程</a>
@@ -298,10 +506,6 @@
         
           <li>
             <a href="/2015/08/20/sqlite-about/">sqlite数据库</a>
-          </li>
-        
-          <li>
-            <a href="/2014/12/07/base-class-and-derived-class-related/">基类派生类的畅想</a>
           </li>
         
       </ul>
