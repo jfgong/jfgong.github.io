@@ -63,6 +63,84 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-latex-manual" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/12/07/latex-manual/" class="article-date">
+  <time datetime="2015-12-07T15:16:16.000Z" itemprop="datePublished">Dec 7 2015</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/12/07/latex-manual/">使用latex</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="图表">图表</h2>
+<p>\begin{figure}[H], 插入图片到固定位置, 不被自动安排位置</p>
+<h2 id="pgfplots用法">pgfplots用法</h2>
+<p>绘制横纵坐标系</p>
+<pre><code>\<span class="keyword">begin</span><span class="tuple">{tikzpicture}</span>
+    \<span class="keyword">begin</span><span class="tuple">{axis}</span>
+    \<span class="keyword">end</span><span class="tuple">{axis}</span>
+\<span class="keyword">end</span><span class="tuple">{tikzpicture}</span>
+</code></pre><h2 id="Install_package">Install package</h2>
+<p>以安装pgfplots为例</p>
+<ul>
+<li>下载宏包并解压</li>
+<li>安装宏包<ul>
+<li>cp pgfplots.sty texmf/tex/latex/pgfplots/</li>
+<li>拷贝其他文件到texmf/tex下的对应目录</li>
+</ul>
+</li>
+<li>更新索引, texhash或者mktexlsr</li>
+<li>检查是否安装成功, kpsewhich pgfplots.sty<ul>
+<li>输出正确路径则为安装成功</li>
+<li>否则, 未安装成功</li>
+</ul>
+</li>
+<li>使用, usepackage{pgfplots}</li>
+</ul>
+<p>就像是安装软件会遇到依赖时一样, 如果新安装的宏包需要使用到其他宏包, 那么需要继续安装其依赖.</p>
+<p>同样以pgfplots为例, 在画图时, 需要使用到tikz, 如果tikz未安装, 那么需要继续安装PGF&amp;TikZ宏包.</p>
+<h2 id="Remove_package">Remove package</h2>
+<p>以上述tikz&amp;pgf宏包为例:</p>
+<ul>
+<li>删除texmf\tex下的所有pgf文件</li>
+<li>更新索引, texhash或者mktexlsr</li>
+</ul>
+<h2 id="Reference">Reference</h2>
+<ol>
+<li><a href="http://ctan.org/" target="_blank" rel="external">CTAN</a></li>
+<li><a href="http://ubuntuforums.org/showthread.php?t=1350523" target="_blank" rel="external">How to install pgfplots</a></li>
+<li><a href="http://blog.csdn.net/zxia1/article/details/17031069" target="_blank" rel="external">Latex之安装宏包</a></li>
+<li><a href="http://blog.csdn.net/mathsoperator/article/details/6747170" target="_blank" rel="external">TeX系列: tikz &amp; pgf 宏包安装步骤</a></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/12/07/latex-manual/" data-id="y2niodg23ykc3033" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/latex/">latex</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-permission-management-in-program" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/12/06/permission-management-in-program/" class="article-date">
@@ -300,7 +378,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/adb/">adb</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/awk/">awk</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/">c</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-language/">c language</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/">c++</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/debug/">debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep/">grep</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/">jekyll</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/">network</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reading/">reading</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sed/">sed</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqlite/">sqlite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcl/">tcl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/thinking/">thinking</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/valgrind/">valgrind</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/">vim</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/adb/">adb</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/awk/">awk</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/">c</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c-language/">c language</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/">c++</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/debug/">debug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/github/">github</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grep/">grep</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jekyll/">jekyll</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/latex/">latex</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/markdown/">markdown</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/network/">network</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reading/">reading</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sed/">sed</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sqlite/">sqlite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcl/">tcl</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/thinking/">thinking</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/valgrind/">valgrind</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/vim/">vim</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -309,7 +387,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/adb/" style="font-size: 10.00px;">adb</a><a href="/tags/android/" style="font-size: 10.00px;">android</a><a href="/tags/awk/" style="font-size: 10.00px;">awk</a><a href="/tags/c/" style="font-size: 10.00px;">c</a><a href="/tags/c-language/" style="font-size: 17.50px;">c language</a><a href="/tags/c/" style="font-size: 20.00px;">c++</a><a href="/tags/debug/" style="font-size: 10.00px;">debug</a><a href="/tags/github/" style="font-size: 12.50px;">github</a><a href="/tags/grep/" style="font-size: 10.00px;">grep</a><a href="/tags/hexo/" style="font-size: 10.00px;">hexo</a><a href="/tags/jekyll/" style="font-size: 10.00px;">jekyll</a><a href="/tags/life/" style="font-size: 10.00px;">life</a><a href="/tags/linux/" style="font-size: 10.00px;">linux</a><a href="/tags/markdown/" style="font-size: 10.00px;">markdown</a><a href="/tags/network/" style="font-size: 12.50px;">network</a><a href="/tags/reading/" style="font-size: 10.00px;">reading</a><a href="/tags/sed/" style="font-size: 10.00px;">sed</a><a href="/tags/shell/" style="font-size: 12.50px;">shell</a><a href="/tags/sqlite/" style="font-size: 10.00px;">sqlite</a><a href="/tags/tcl/" style="font-size: 10.00px;">tcl</a><a href="/tags/thinking/" style="font-size: 15.00px;">thinking</a><a href="/tags/valgrind/" style="font-size: 10.00px;">valgrind</a><a href="/tags/vim/" style="font-size: 10.00px;">vim</a>
+      <a href="/tags/adb/" style="font-size: 10.00px;">adb</a><a href="/tags/android/" style="font-size: 10.00px;">android</a><a href="/tags/awk/" style="font-size: 10.00px;">awk</a><a href="/tags/c/" style="font-size: 10.00px;">c</a><a href="/tags/c-language/" style="font-size: 17.50px;">c language</a><a href="/tags/c/" style="font-size: 20.00px;">c++</a><a href="/tags/debug/" style="font-size: 10.00px;">debug</a><a href="/tags/github/" style="font-size: 12.50px;">github</a><a href="/tags/grep/" style="font-size: 10.00px;">grep</a><a href="/tags/hexo/" style="font-size: 10.00px;">hexo</a><a href="/tags/jekyll/" style="font-size: 10.00px;">jekyll</a><a href="/tags/latex/" style="font-size: 10.00px;">latex</a><a href="/tags/life/" style="font-size: 10.00px;">life</a><a href="/tags/linux/" style="font-size: 10.00px;">linux</a><a href="/tags/markdown/" style="font-size: 10.00px;">markdown</a><a href="/tags/network/" style="font-size: 12.50px;">network</a><a href="/tags/reading/" style="font-size: 10.00px;">reading</a><a href="/tags/sed/" style="font-size: 10.00px;">sed</a><a href="/tags/shell/" style="font-size: 12.50px;">shell</a><a href="/tags/sqlite/" style="font-size: 10.00px;">sqlite</a><a href="/tags/tcl/" style="font-size: 10.00px;">tcl</a><a href="/tags/thinking/" style="font-size: 15.00px;">thinking</a><a href="/tags/valgrind/" style="font-size: 10.00px;">valgrind</a><a href="/tags/vim/" style="font-size: 10.00px;">vim</a>
     </div>
   </div>
 
@@ -318,7 +396,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">November 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">October 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">September 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">August 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">July 2013</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">May 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">March 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">January 2013</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">December 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/11/">November 2015</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">September 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">August 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">December 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/11/">November 2014</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/10/">October 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">November 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">October 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/09/">September 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">August 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">July 2013</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">May 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">March 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">January 2013</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -328,6 +406,10 @@
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/12/07/latex-manual/">使用latex</a>
+          </li>
         
           <li>
             <a href="/2015/12/06/permission-management-in-program/">数据传递与转换中的权限管理</a>
@@ -343,10 +425,6 @@
         
           <li>
             <a href="/2015/09/18/valgrind/">valgrind</a>
-          </li>
-        
-          <li>
-            <a href="/2015/08/20/sqlite-about/">sqlite数据库</a>
           </li>
         
       </ul>
