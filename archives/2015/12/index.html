@@ -85,47 +85,13 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="图表">图表</h2>
-<p>\begin{figure}[H], 插入图片到固定位置, 不被自动安排位置</p>
-<h2 id="pgfplots用法">pgfplots用法</h2>
-<p>绘制横纵坐标系</p>
-<pre><code>\<span class="keyword">begin</span><span class="tuple">{tikzpicture}</span>
-    \<span class="keyword">begin</span><span class="tuple">{axis}</span>
-    \<span class="keyword">end</span><span class="tuple">{axis}</span>
-\<span class="keyword">end</span><span class="tuple">{tikzpicture}</span>
-</code></pre><h2 id="Install_package">Install package</h2>
-<p>以安装pgfplots为例</p>
-<ul>
-<li>下载宏包并解压</li>
-<li>安装宏包<ul>
-<li>cp pgfplots.sty texmf/tex/latex/pgfplots/</li>
-<li>拷贝其他文件到texmf/tex下的对应目录</li>
-</ul>
-</li>
-<li>更新索引, texhash或者mktexlsr</li>
-<li>检查是否安装成功, kpsewhich pgfplots.sty<ul>
-<li>输出正确路径则为安装成功</li>
-<li>否则, 未安装成功</li>
-</ul>
-</li>
-<li>使用, usepackage{pgfplots}</li>
-</ul>
-<p>就像是安装软件会遇到依赖时一样, 如果新安装的宏包需要使用到其他宏包, 那么需要继续安装其依赖.</p>
-<p>同样以pgfplots为例, 在画图时, 需要使用到tikz, 如果tikz未安装, 那么需要继续安装PGF&amp;TikZ宏包.</p>
-<h2 id="Remove_package">Remove package</h2>
-<p>以上述tikz&amp;pgf宏包为例:</p>
-<ul>
-<li>删除texmf\tex下的所有pgf文件</li>
-<li>更新索引, texhash或者mktexlsr</li>
-</ul>
-<h2 id="Reference">Reference</h2>
-<ol>
-<li><a href="http://ctan.org/" target="_blank" rel="external">CTAN</a></li>
-<li><a href="http://ubuntuforums.org/showthread.php?t=1350523" target="_blank" rel="external">How to install pgfplots</a></li>
-<li><a href="http://blog.csdn.net/zxia1/article/details/17031069" target="_blank" rel="external">Latex之安装宏包</a></li>
-<li><a href="http://blog.csdn.net/mathsoperator/article/details/6747170" target="_blank" rel="external">TeX系列: tikz &amp; pgf 宏包安装步骤</a></li>
-</ol>
+        <p>Latex是一种基于TEX的排版系统, 在一切皆文本的linux中, 使用latex可以方便的绘制图表和制作文档, 因为其丰富的宏包工具, 可以轻松处理复杂的表格, 绘图和数学公式等问题, 适合生成高质量的科学文档, 所以latex在科研写作中得到非常广泛的运用.</p>
 
+        
+          <p class="article-more-link">
+            <a href="/2015/12/07/latex-manual/#more">Read More</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
