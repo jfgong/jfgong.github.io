@@ -212,7 +212,7 @@ Father'</span>s info: age = <span class="number">28</span>
 </blockquote>
 <p>如果强制转换基类指针的类型, 如<code>Children *fa2ch = (Children*)pf;</code>, 可以通过编译, 在本机执行中, 获得如下结果:</p>
 <pre><code>Children's info: father's age = <span class="number">25</span>, grade = <span class="number">0</span>
-</code></pre><p>即便已经完成执行, 但是也要注意到其中的隐患, 因为这是一个权限放大的过程, 通过派生类指针访问基类对象本身就是有风险的, 尤其是在访问到派生类独有的数据如<code>m_iGrage</code>时, 程序存在随机的未知风险.</p>
+</code></pre><p>但是如果使用valgrind检测内存适用情况, 在log文件中, 会在<code>fa2ch-&gt;displayInfo();</code>处报<code>Invalid read</code>错误. 所以即便已经完成执行, 但是也要注意到其中的隐患, 因为这是一个权限放大的过程, 通过派生类指针访问基类对象是不安全的, 尤其是在访问到派生类独有的数据如<code>m_iGrage</code>时, 程序存在随机的未知风险.</p>
 <h2 id="变量与常量">变量与常量</h2>
 <p>在函数的形参中, 经常将参数设置为const类型, 这可以避免参数在函数中被修改, 从而在编译器级别杜绝参数被编辑的错误隐患. 同样的, 我们也可以将const的赋值问题纳入权限管理的范畴.</p>
 <table>
