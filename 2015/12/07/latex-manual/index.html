@@ -91,24 +91,26 @@
 <h2 id="图表">图表</h2>
 <ul>
 <li>table是让表格浮动的环境</li>
-<li><p>tabular是构造表格的环境</p>
-<p>  \begin{table}[htbpH]</p>
-<pre><code>  \centering
-  \caption<span class="decorator">{.....}</span>
-  \label<span class="decorator">{...}</span>
-
-  \begin{tabular}<span class="decorator">{...}</span>
-      .........
-  \<span class="keyword">end</span>{tabular}
-</code></pre><p>  \end{table}</p>
-</li>
+<li>tabular是构造表格的环境</li>
 </ul>
-<p>table是不可分割的box, 不能被隔断, 所以不能在table环境中使用longtable, 即不能简单替换上述的tabular为longtable.</p>
+<p>以下是构建table的一般框架:</p>
+<pre><code>\begin{table}[htbpH]
+
+    \centering
+    \caption<span class="decorator">{.....}</span>
+    \label<span class="decorator">{...}</span>
+
+    \begin{tabular}<span class="decorator">{...}</span>
+        .........
+    \<span class="keyword">end</span>{tabular}
+
+\<span class="keyword">end</span>{table}
+</code></pre><p>table是不可分割的box, 不能被隔断, 所以不能在table环境中使用longtable, 即不能简单替换上述的tabular为longtable.</p>
 <pre><code>\begin{longtable}{|c|c|c|}
   \caption{$tbl_caption}
   <span class="keyword">...</span> table contents <span class="keyword">...</span>
 \end {longtable}
-</code></pre><p>以下是构建一个简单table的代码:</p>
+</code></pre><p>以下代码创建一个简单table:</p>
 <pre><code><span class="command">\begin</span><span class="special">{</span>table<span class="special">}</span><span class="special">[</span>H<span class="special">]</span>
 <span class="command">\centering</span>
 <span class="command">\caption</span><span class="special">{</span>head<span class="special">}</span>
@@ -121,7 +123,7 @@
 <span class="command">\end</span><span class="special">{</span>tabular<span class="special">}</span>
 <span class="command">\caption</span><span class="special">{</span>tail<span class="special">}</span>
 <span class="command">\end</span><span class="special">{</span>table<span class="special">}</span>
-</code></pre><p><code>\begin{figure}[H]</code>, 插入图片到固定位置, 不被Latex自动安排, 从下图的效果中可以发现, <code>\caption</code>添加的位置可以控制表格标题的位置:</p>
+</code></pre><p>其中<code>\begin{table}[H]</code>指定插入图表到固定位置, 不被Latex自动安排, 从效果中可以发现, <code>\caption</code>添加的位置可以控制表格标题的位置:</p>
 <p><img src="http://7xosgd.com1.z0.glb.clouddn.com/latex_table.png" alt="latex_table"></p>
 <h2 id="multirow">multirow</h2>
 <p>latex表格中支持multirow和multicol, 以下以multirow为例介绍table的复杂用法.</p>
@@ -146,7 +148,7 @@
 </code></pre><p>table中需要合并行时, <code>multirow{row_num}{width}{text}</code>中row_num表示跨越的行数, width设为*时, table自行决定宽度, text为填写的内容, 可用\强行换行. 此例中, multirow占3行, 第一行前两列均是multirow, 后两列是正常单元格, 第一行使用3个连续的&amp;表示4列, <code>\\</code>表示新起一行, 这时需要注意的是, 第二行和第三行的前两列均为空白, 所以在继续第一行的第一列的multirow时需要使用<code>&amp; &amp;</code>留空. 表格的效果如下图所示:</p>
 <p><img src="http://7xosgd.com1.z0.glb.clouddn.com/latex_multirow_table.png" alt="latex_multirow"></p>
 <h2 id="makeatletter">makeatletter</h2>
-<p>重定义Latex的内置macro命令<code>cline{i,j}</code>, 防止longtable在multirow中发生分页.</p>
+<p>以下代码重定义Latex的内置macro命令<code>cline{i,j}</code>, 防止longtable在multirow中发生分页.</p>
 <pre><code><span class="command">\makeatletter</span>
 <span class="command">\def</span><span class="command">\@</span>cline<span class="special">#</span>1-<span class="special">#</span>2<span class="command">\@</span>nil<span class="special">{</span><span class="comment">%</span>
   <span class="command">\omit</span>
@@ -164,18 +166,18 @@
 <p>用户也可以自行定义任何字符的类别, 例如makeatletter便可以将at字符@划归letter类中. 所以为了修改Latex的内部命令, 需要先使用makeatletter改变@的类别到letter以支持使用, 然后编辑修改Latex的内部macro, 最后使用makeatother将at符号@划归到other类中.</p>
 <h2 id="pgfplots用法">pgfplots用法</h2>
 <p>绘制横纵坐标系</p>
-<pre><code>\<span class="keyword">begin</span>{tikzpicture}
-    \<span class="keyword">begin</span>{axis}
-    <span class="string">%%%</span><span class="string">%%%</span><span class="string">%%%</span><span class="string">%%%</span><span class="string">%%%</span>
-    \<span class="keyword">end</span>{axis}
-\<span class="keyword">end</span>{tikzpicture}
+<pre><code>\<span class="keyword">begin</span><span class="tuple">{tikzpicture}</span>
+    \<span class="keyword">begin</span><span class="tuple">{axis}</span>
+    <span class="comment">% % %</span>
+    \<span class="keyword">end</span><span class="tuple">{axis}</span>
+\<span class="keyword">end</span><span class="tuple">{tikzpicture}</span>
 </code></pre><h2 id="pdflatex">pdflatex</h2>
 <pre><code>pdflatex latex.tex <span class="comment">%生成pdf</span>
 pdflatex latex.tex <span class="comment">%构建目录</span>
-</code></pre><h2 id="居中">居中</h2>
+</code></pre><h2 id="居中环境">居中环境</h2>
 <p>将图表环境置于center环境中即可实现居中</p>
 <pre><code>\<span class="keyword">begin</span><span class="tuple">{center}</span>
-<span class="comment">%%%%%</span>
+<span class="comment">% % %</span>
 \<span class="keyword">end</span><span class="tuple">{center}</span>
 </code></pre><h2 id="Install_package">Install package</h2>
 <p>以安装pgfplots为例</p>
@@ -196,7 +198,7 @@ pdflatex latex.tex <span class="comment">%构建目录</span>
 </ul>
 <p>就像是安装软件会遇到依赖时一样, 如果新安装的宏包需要使用到其他宏包, 那么需要继续安装其依赖.</p>
 <p>同样以pgfplots为例, 在画图时, 需要使用到tikz, 如果tikz未安装, 那么需要继续安装PGF&amp;TikZ宏包.</p>
-<p>可以在<a href="http://ctan.org/" target="_blank" rel="external">CTAN</a>中下载TDS宏包, TDS包一般命名为[包名].tds.zip<br>或者<a href="http://mirrors.ustc.edu.cn/CTAN/install/" target="_blank" rel="external">科大镜像站点</a></p>
+<p>TDS宏包资源可以在<a href="http://ctan.org/" target="_blank" rel="external">CTAN</a>网站或者<a href="http://mirrors.ustc.edu.cn/CTAN/install/" target="_blank" rel="external">科大镜像站点</a>下载, TDS包的一般命名规则为[包名].tds.zip</p>
 <h2 id="Remove_package">Remove package</h2>
 <p>以上述tikz&amp;pgf宏包为例:</p>
 <ul>
@@ -205,12 +207,12 @@ pdflatex latex.tex <span class="comment">%构建目录</span>
 </ul>
 <h2 id="Reference">Reference</h2>
 <ol>
-<li><a href="http://www.tug.org/pipermail/tugindia/2002-January/000178.html" target="_blank" rel="external">Makeatletter and Makeatother</a></li>
-<li><a href="http://tex.stackexchange.com/questions/6240/why-do-latex-internal-commands-have-an-in-them" target="_blank" rel="external">Why do LaTeX internal commands have an @ in them?</a></li>
-<li><a href="http://tex.stackexchange.com/questions/103495/longtable-with-multicolumn-and-multirow-not-working" target="_blank" rel="external">Longtable with multicolumn and multirow not working</a></li>
 <li><a href="http://ubuntuforums.org/showthread.php?t=1350523" target="_blank" rel="external">How to install pgfplots</a></li>
 <li><a href="http://blog.csdn.net/zxia1/article/details/17031069" target="_blank" rel="external">Latex之安装宏包</a></li>
 <li><a href="http://blog.csdn.net/mathsoperator/article/details/6747170" target="_blank" rel="external">TeX系列: tikz &amp; pgf 宏包安装步骤</a></li>
+<li><a href="http://tex.stackexchange.com/questions/103495/longtable-with-multicolumn-and-multirow-not-working" target="_blank" rel="external">Longtable with multicolumn and multirow not working</a></li>
+<li><a href="http://www.tug.org/pipermail/tugindia/2002-January/000178.html" target="_blank" rel="external">Makeatletter and Makeatother</a></li>
+<li><a href="http://tex.stackexchange.com/questions/6240/why-do-latex-internal-commands-have-an-in-them" target="_blank" rel="external">Why do LaTeX internal commands have an @ in them?</a></li>
 </ol>
 
       
